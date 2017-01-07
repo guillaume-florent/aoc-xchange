@@ -11,6 +11,7 @@ Deals with .dat files, mostly used to define 2D foil sections
 """
 
 import logging
+import re
 
 import aocxchange.checks
 import aocxchange.extensions
@@ -54,10 +55,13 @@ class DatImporter(object):
             lines = lines[1:]
 
         for line in lines:
-            line = line.lstrip().rstrip().replace('    ', ' ').replace('   ', ' ').replace('  ', ' ')
-            data = line.split(' ')  # data[0] = x coord.    data[1] = y coord.
-            # 3 - create an array of points
+            data = re.findall(r'\S+', line)
+
             if len(data) == 2:  # two coordinates for each point
+
+                if float(data[0]) > 1. or float(data[0]) < 0.:
+                    logger.warn("Point %f %f in dat file has a x outside of 0->1" % (float(data[0]), float(data[1])))
+
                 if self._as_3d:
                     points.append((float(data[0]), float(data[1]), 0.0))
                 else:
@@ -75,3 +79,21 @@ class DatImporter(object):
 
         """
         return self._points
+
+
+def import_dat_file(filename, as_3d=False, skip_first_line=False):
+    r"""
+
+    Parameters
+    ----------
+    filename
+    as_3d
+    skip_first_line
+
+    Returns
+    -------
+    list[tuple]
+
+    """
+    dat_importer = DatImporter(filename, as_3d, skip_first_line)
+    return dat_importer.points
