@@ -66,7 +66,8 @@ class StlExporter(object):
         logger.info("StlExporter instantiated with filename : %s" % filename)
         logger.info("StlExporter ascii : %s" % str(ascii_mode))
 
-        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.stl_extensions)
+        aocxchange.checks.check_exporter_filename(filename,
+                                                  aocxchange.extensions.stl_extensions)
         aocxchange.checks.check_overwrite(filename)
 
         self._shape = None  # only one shape can be exported
@@ -82,13 +83,19 @@ class StlExporter(object):
         a_shape
 
         """
-        aocxchange.checks.check_shape(a_shape)  # raises an exception if the shape is not valid
+        # raises an exception if the shape is not valid
+        aocxchange.checks.check_shape(a_shape)
+
         self._shape = a_shape
 
     def write_file(self):
         r"""Write file"""
-        # OCC.StlAPI.SetASCIIMode((self._ascii_mode)
         stl_writer = OCC.StlAPI.StlAPI_Writer()
-        stl_writer.Write(self._shape, self._filename, self._ascii_mode)
+        try:
+            stl_writer.Write(self._shape, self._filename, self._ascii_mode)
+        except TypeError:
+            OCC.StlAPI.SetASCIIMode(self._ascii_mode)
+            stl_writer.Write(self._shape, self._filename)
+
         # stl_writer.Write(self._shape, self._filename)
         logger.info("Wrote STL file")
