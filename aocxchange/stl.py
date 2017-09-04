@@ -94,7 +94,7 @@ class StlExporter(object):
         try:
             stl_writer.Write(self._shape, self._filename, self._ascii_mode)
         except TypeError:
-            OCC.StlAPI.SetASCIIMode(self._ascii_mode)
+            stl_writer.SetASCIIMode(self._ascii_mode)
             stl_writer.Write(self._shape, self._filename)
 
         # stl_writer.Write(self._shape, self._filename)
