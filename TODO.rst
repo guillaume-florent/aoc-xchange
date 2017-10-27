@@ -1,3 +1,25 @@
+conversions
+-----------
+
+step_to_obj:
+    tests !!
+    linux script
+    windows script
+    install instructions
+    dockerization
+
+    Dockerization
+    -------------
+    Minimal Linux
+    Miniconda
+    conda install pythonocc
+    aocutils (git clone)
+    aocxchange (git clone)
+    install pymesh (pip install pymesh) -> NO, included in aocxchange
+    make a script available system-wide
+    how to call from outside?
+
+
 dialogs
 -------
 

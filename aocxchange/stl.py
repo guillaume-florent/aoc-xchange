@@ -91,6 +91,8 @@ class StlExporter(object):
     def write_file(self):
         r"""Write file"""
         stl_writer = OCC.StlAPI.StlAPI_Writer()
+
+        # Cross OCC versions STL writing
         try:
             stl_writer.Write(self._shape, self._filename, self._ascii_mode)
         except TypeError:
