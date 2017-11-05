@@ -3,10 +3,15 @@
 r"""STL format mesh"""
 
 from __future__ import absolute_import, print_function
+
+import logging
 import numpy
 import os
 import struct
 from .base import BaseMesh
+
+
+logger = logging.getLogger(__name__)
 
 
 class Stl(BaseMesh):
@@ -89,7 +94,8 @@ class Stl(BaseMesh):
                 mode = Stl.MODE_ASCII
             except:
                 # NO pass after except (GF 27 OCT 2017)
-                print("Error in header splitting or ascii loading")
+                msg = "Error in header splitting or ascii loading"
+                logger.warning(msg)
                 # pass
 
         else:
@@ -173,7 +179,9 @@ class Stl(BaseMesh):
 
         line = get()
         if not line.startswith('solid ') and line.startswith('solid'):
-            print("Error")
+            msg = "Missing space after solid"
+            logger.warning(msg)
+            # print("Error")
 
         if not lines:
             raise RuntimeError(recoverable[0],

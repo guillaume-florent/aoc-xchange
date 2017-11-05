@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+r"""STEP to STL converter"""
+
+import logging
+from os import getcwd
+from os.path import join, isfile, abspath, splitext
+from argparse import ArgumentParser
+from aocxchange.convert.step_to_stl import step_to_stl, ONE_SHAPE_PER_FILE, \
+    ALL_SHAPES_IN_ONE_FILE
+from aocxchange.exceptions import FileNotFoundException
+
+logger = logging.getLogger(__name__)
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
+                           '%(lineno)3d :: %(message)s')
+
+
+parser = ArgumentParser(description="Convert STEP file to STL")
+parser.add_argument('-m', '--meshfactor',
+                    type=float,
+                    required=False,
+                    default=4000,
+                    help="Specify the mesh factor")
+parser.add_argument('-u', '--usemindim',
+                    action='store_true',
+                    help="Use the minimum dimension for mesh sizing")
+parser.add_argument('-b', '--binary',
+                    action='store_true',
+                    help="Convert to binary format")
+parser.add_argument('-n', '--allshapes',
+                    action='store_true',
+                    help="Put all the shapes in the same file")
+parser.add_argument('stepfile', type=str, nargs=1)
+args = parser.parse_args()
+
+if isfile(abspath(join(getcwd(), args.stepfile[0]))):
+    stepfile = join(getcwd(), args.stepfile[0])
+else:
+    stepfile = args.stepfile[0]
+
+stlfile = splitext(stepfile)[0] + ".stl"
+
+mode = ALL_SHAPES_IN_ONE_FILE if args.allshapes is True else ONE_SHAPE_PER_FILE
+
+try:
+    step_to_stl(stepfile,
+                stlfile,
+                factor=args.meshfactor,
+                use_min_dim=args.usemindim,
+                ascii_mode=not args.binary,
+                multi_shape_mode=mode)
+except FileNotFoundException:
+    logger.error("STEP file does not exist")

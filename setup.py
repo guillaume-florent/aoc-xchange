@@ -135,7 +135,9 @@ setup(
     # "scripts" keyword. Entry points provide cross-platform support and allow
     # pip to create the appropriate form of executable for the target platform.
     # entry_points={'console_scripts': ['sample=sample:main',],},
-    entry_points={}
+    entry_points={},
+
+    scripts=['bin/step_to_stl', 'bin/step_to_obj']
 
     )
 

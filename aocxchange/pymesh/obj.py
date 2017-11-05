@@ -3,8 +3,13 @@
 r"""OBJ format mesh"""
 
 from __future__ import absolute_import, print_function
+
+import logging
 import numpy
 from aocxchange.pymesh.base import BaseMesh
+
+
+logger = logging.getLogger(__name__)
 
 
 class Obj(BaseMesh):
@@ -81,4 +86,6 @@ class Obj(BaseMesh):
                        0)
 
         except:
-            raise RuntimeError("Failed to load OBJ file.")
+            msg = "Failed to load OBJ file."
+            logger.error(msg)
+            raise RuntimeError(msg)

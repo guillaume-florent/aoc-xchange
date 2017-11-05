@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 r"""Convert a STEP file to STL file"""

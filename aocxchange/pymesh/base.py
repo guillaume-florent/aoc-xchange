@@ -4,6 +4,8 @@ r"""Base mesh"""
 
 from __future__ import absolute_import, print_function
 
+import logging
+
 import datetime
 import math
 import os
@@ -13,6 +15,9 @@ import numpy
 
 # used in header of written STL or OBJ files
 from aocxchange import __name__, __version__, __url__
+
+
+logger = logging.getLogger(__name__)
 
 
 MODE_STL_AUTO = 0
@@ -389,3 +394,5 @@ class BaseMesh(object):
                     faces[1], normal,
                     faces[2], normal,
                 ), file=fh)
+
+        logger.info("Wrote %s" % filename)
