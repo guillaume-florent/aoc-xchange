@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 def step_to_obj(step_file_path,
                 obj_file_path,
+                scale=1.,
                 factor=4000.,
                 use_min_dim=False,
                 remove_intermediate_stl=True):
@@ -50,6 +51,7 @@ def step_to_obj(step_file_path,
 
     list_of_files, nb_shapes = step_to_stl(step_file_path,
                                            stl_temp_file,
+                                           scale,
                                            factor,
                                            use_min_dim,
                                            ascii_mode=True,

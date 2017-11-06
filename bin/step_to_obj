@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 r"""STEP to OBJ converter"""
 
@@ -17,6 +18,11 @@ logging.basicConfig(level=logging.INFO,
 
 
 parser = ArgumentParser(description="Convert STEP file to OBJ")
+parser.add_argument('-s', '--scale',
+                    type=float,
+                    required=False,
+                    default=1,
+                    help="Specify the scaling factor")
 parser.add_argument('-m', '--meshfactor',
                     type=float,
                     required=False,
@@ -41,6 +47,7 @@ objfile = splitext(stepfile)[0] + ".obj"
 try:
     step_to_obj(stepfile,
                 objfile,
+                scale=args.scale,
                 factor=args.meshfactor,
                 use_min_dim=args.usemindim,
                 remove_intermediate_stl=not args.keepintermediate)

@@ -10,6 +10,9 @@ from aocxchange.step import StepImporter
 from aocxchange.stl import StlExporter
 
 from aocutils.mesh import mesh
+from aocutils.operations.transform import scale_uniform
+
+from OCC.gp import gp_Pnt
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +23,7 @@ ALL_SHAPES_IN_ONE_FILE = 1
 
 def step_to_stl(step_file_path,
                 stl_file_path,
+                scale=1.,
                 factor=4000.,
                 use_min_dim=False,
                 ascii_mode=True,
@@ -49,7 +53,7 @@ def step_to_stl(step_file_path,
         
 
     """
-    def shape_to_stl(shape_, stl_file_, ascii_mode_, factor_, use_min_dim_):
+    def shape_to_stl(shape_, stl_file_, scale, ascii_mode_, factor_, use_min_dim_):
         r"""Write a single shape to an STL file
         
         Parameters
@@ -63,8 +67,10 @@ def step_to_stl(step_file_path,
         """
         exporter = StlExporter(filename=stl_file_, ascii_mode=ascii_mode_)
 
+        shape_ = scale_uniform(shape_, gp_Pnt(0, 0, 0), scale, False)
+
         # Must mesh ! Otherwise the exporter does not write anything!
-        mesh(shapes[0], factor=factor_, use_min_dim=use_min_dim_)
+        mesh(shape_, factor=factor_, use_min_dim=use_min_dim_)
 
         exporter.set_shape(shape_)
         exporter.write_file()
@@ -78,7 +84,7 @@ def step_to_stl(step_file_path,
         raise ValueError(msg)
 
     elif len(shapes) == 1:  # 99.9 % of practical cases
-        shape_to_stl(shapes[0], stl_file_path, ascii_mode, factor, use_min_dim)
+        shape_to_stl(shapes[0], stl_file_path, scale, ascii_mode, factor, use_min_dim)
         assert isfile(stl_file_path)
         return [stl_file_path], 1
 
@@ -90,6 +96,7 @@ def step_to_stl(step_file_path,
                 filename = f+"_"+str(i)+e
                 shape_to_stl(shape,
                              filename,
+                             scale,
                              ascii_mode,
                              factor,
                              use_min_dim)
@@ -102,6 +109,7 @@ def step_to_stl(step_file_path,
                 filename = f + "_" + str(i) + e
                 shape_to_stl(shape,
                              filename,
+                             scale,
                              ascii_mode,
                              factor,
                              use_min_dim)

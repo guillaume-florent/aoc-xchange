@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 r"""STEP to STL converter"""
 
@@ -18,6 +19,11 @@ logging.basicConfig(level=logging.INFO,
 
 
 parser = ArgumentParser(description="Convert STEP file to STL")
+parser.add_argument('-s', '--scale',
+                    type=float,
+                    required=False,
+                    default=1,
+                    help="Specify the scaling factor")
 parser.add_argument('-m', '--meshfactor',
                     type=float,
                     required=False,
@@ -47,6 +53,7 @@ mode = ALL_SHAPES_IN_ONE_FILE if args.allshapes is True else ONE_SHAPE_PER_FILE
 try:
     step_to_stl(stepfile,
                 stlfile,
+                scale=args.scale,
                 factor=args.meshfactor,
                 use_min_dim=args.usemindim,
                 ascii_mode=not args.binary,
