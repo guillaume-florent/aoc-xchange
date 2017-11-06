@@ -334,7 +334,7 @@ class BaseMesh(object):
         print("endsolid {}".format(name), file=fh)
 
     # OBJ
-    def save_obj(self, filename, update_normals=True):
+    def save_obj(self, filename, update_normals=True, write_normals=False):
         """Save data in OBJ format
         
         Parameters
@@ -388,11 +388,17 @@ class BaseMesh(object):
             for t in triangle_list:
                 faces = t[0]
                 normal = t[1]
-
-                print("f {}//{} {}//{} {}//{}".format(
-                    faces[0], normal,
-                    faces[1], normal,
-                    faces[2], normal,
-                ), file=fh)
+                if write_normals is True:
+                    print("f {}//{} {}//{} {}//{}".format(
+                        faces[0], normal,
+                        faces[1], normal,
+                        faces[2], normal,
+                    ), file=fh)
+                else:
+                    print("f {} {} {}".format(
+                        faces[0],
+                        faces[1],
+                        faces[2]
+                    ), file=fh)
 
         logger.info("Wrote %s" % filename)

@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 def step_to_obj(step_file_path,
                 obj_file_path,
                 scale=1.,
+                write_normals=False,
                 factor=4000.,
                 use_min_dim=False,
                 remove_intermediate_stl=True):
@@ -62,7 +63,7 @@ def step_to_obj(step_file_path,
         mesh = stl.Stl(stl_f)
 
         # Save as OBJ
-        mesh.save_obj(obj_file_path, update_normals=True)
+        mesh.save_obj(obj_file_path, update_normals=True, write_normals=write_normals)
 
     # Delete STL
     if remove_intermediate_stl is True:

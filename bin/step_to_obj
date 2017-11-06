@@ -23,6 +23,9 @@ parser.add_argument('-s', '--scale',
                     required=False,
                     default=1,
                     help="Specify the scaling factor")
+parser.add_argument('-n', '--normals',
+                    action='store_true',
+                    help="Write normals ( *//*)")
 parser.add_argument('-m', '--meshfactor',
                     type=float,
                     required=False,
@@ -48,6 +51,7 @@ try:
     step_to_obj(stepfile,
                 objfile,
                 scale=args.scale,
+                write_normals=args.normals,
                 factor=args.meshfactor,
                 use_min_dim=args.usemindim,
                 remove_intermediate_stl=not args.keepintermediate)
