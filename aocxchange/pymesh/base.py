@@ -383,8 +383,9 @@ class BaseMesh(object):
             print("", file=fh)
             for v in vectors_list:
                 print("v {} {} {}".format(v[0], v[1], v[2]), file=fh)
-            for vn in normals_list:
-                print("vn {} {} {}".format(vn[0], vn[1], vn[2]), file=fh)
+            if write_normals is True:
+                for vn in normals_list:
+                    print("vn {} {} {}".format(vn[0], vn[1], vn[2]), file=fh)
             for t in triangle_list:
                 faces = t[0]
                 normal = t[1]
