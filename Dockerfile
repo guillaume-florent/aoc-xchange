@@ -8,7 +8,7 @@
 #################################################
 # FROM continuumio/miniconda
 # FROM show0k/alpine-miniconda
-FROM conda/miniconda2:latest
+FROM continuumio/miniconda3:4.4.10
 
 MAINTAINER Guillaume Florent <florentsailing@gmail.com>
 
