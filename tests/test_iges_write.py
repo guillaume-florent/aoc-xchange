@@ -58,7 +58,7 @@ def test_iges_exporter_wrong_format(box_shape):
     r"""Format is not 5.1 or 5.3"""
     filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.igs")
     with pytest.raises(aocxchange.exceptions.IgesUnknownFormatException):
-        aocxchange.iges.IgesExporter(filename, format="48.3")
+        aocxchange.iges.IgesExporter(filename, format_="48.3")
 
 
 def test_iges_exporter_adding_not_a_shape(box_shape):

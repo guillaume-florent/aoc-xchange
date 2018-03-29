@@ -212,10 +212,10 @@ class BaseMesh(object):
         v2 = self.vectors[:, 2, :3]
         _normals = numpy.cross(v1 - v0, v2 - v0)
 
-        for i in range(len(_normals)):
-            norm = numpy.linalg.norm(_normals[i])
+        for i, _normal in enumerate(_normals):
+            norm = numpy.linalg.norm(_normal)
             if norm != 0:
-                _normals[i] /= numpy.linalg.norm(_normals[i])
+                _normals[i] /= numpy.linalg.norm(_normal)
 
         self.normals[:] = _normals
         return self
@@ -225,7 +225,7 @@ class BaseMesh(object):
     #
     def get_volume(self):
         r"""Volume of the mesh
-        
+
         Returns
         -------
         float : the volume
@@ -319,15 +319,15 @@ class BaseMesh(object):
 
     def __save_stl_ascii(self, fh, name):
         print("solid {}".format(name), file=fh)
-        for i in range(len(self.vectors)):
+        for i, vector in enumerate(self.vectors):
             print("facet normal %f %f %f" % tuple(self.normals[i][:3]),
                   file=fh)
             print("  outer loop", file=fh)
-            print("    vertex %f %f %f" % tuple(self.vectors[i][0][:3]),
+            print("    vertex %f %f %f" % tuple(vector[0][:3]),
                   file=fh)
-            print("    vertex %f %f %f" % tuple(self.vectors[i][1][:3]),
+            print("    vertex %f %f %f" % tuple(vector[1][:3]),
                   file=fh)
-            print("    vertex %f %f %f" % tuple(self.vectors[i][2][:3]),
+            print("    vertex %f %f %f" % tuple(vector[2][:3]),
                   file=fh)
             print("  endloop", file=fh)
             print("endfacet", file=fh)
@@ -342,6 +342,7 @@ class BaseMesh(object):
         filename : str
             The obj file name
         update_normals : bool
+        write_normals : bool
 
         """
         if update_normals:
@@ -356,13 +357,13 @@ class BaseMesh(object):
         for i, vector in enumerate(self.vectors):
             one_triangle = []
             for j in range(3):
-                v_key = ",".join(map(str, self.vectors[i][j][:3]))
+                v_key = ",".join(map(str, vector[j][:3]))
                 if v_key in vectors_key_list:
                     v_index = vectors_key_list.index(v_key)
                 else:
                     v_index = len(vectors_key_list)
                     vectors_key_list.append(v_key)
-                    vectors_list.append(self.vectors[i][j][:3])
+                    vectors_list.append(vector[j][:3])
                 one_triangle.append(v_index + 1)
 
             n_key = ",".join(map(str, self.normals[i][:3]))

@@ -107,7 +107,7 @@ def handle_cad_file_open():
     Returns
     -------
     path : str
-    type : str
+    type_ : str
         iges, step, stl brep
     shapes: list[OCC.TopoDS.TopoDS_Shape]
 
@@ -116,28 +116,30 @@ def handle_cad_file_open():
         if open_cad_file_dialog.ShowModal() == wx.ID_OK:
 
             # cast the path from the FileDialog to st to avoid
-            # TypeError: in method 'XSControl_Reader_ReadFile', argument 2 of type 'char const *'
+            # TypeError: in method 'XSControl_Reader_ReadFile',
+            #                                  argument 2 of type 'char const *'
             path = str(open_cad_file_dialog.GetPath())
             extension = aocxchange.utils.extract_file_extension(path)
 
             if extension.lower() in aocxchange.extensions.step_extensions:
-                type = "step"
+                type_ = "step"
                 shapes = aocxchange.step.StepImporter(path).shapes
             elif extension.lower() in aocxchange.extensions.iges_extensions:
-                type = "iges"
+                type_ = "iges"
                 shapes = aocxchange.iges.IgesImporter(path).shapes
             elif extension.lower() in aocxchange.extensions.stl_extensions:
-                type = "stl"
+                type_ = "stl"
                 shapes = list()
                 shapes.append(aocxchange.stl.StlImporter(path).shape)
             elif extension.lower() in aocxchange.extensions.brep_extensions:
-                type = "brep"
+                type_ = "brep"
                 shapes = list()
                 shapes.append(aocxchange.brep.BrepImporter(path).shape)
             else:
-                raise ValueError("File extension indicates a file type that is not supported")
+                raise ValueError("File extension indicates a file type that "
+                                 "is not supported")
             # return filepath + type (iges ...) + list of shapes
-            return path, type, shapes
+            return path, type_, shapes
         else:  # cancel button
             return None, None, None
 
@@ -156,7 +158,10 @@ def handle_cad_file_save_as(shapes):
 
     """
 
-    assert len(shapes) > 0
+    # assert len(shapes) > 0
+    if len(shapes) == 0:
+        msg = "shapes list does not contain any shape"
+        raise ValueError(msg)
 
     with SaveAsCadDialog() as save_as_cad_dialog:
         if save_as_cad_dialog.ShowModal() == wx.ID_OK:
@@ -176,8 +181,9 @@ def handle_cad_file_save_as(shapes):
                 type = "iges"
                 with IgesFormatDialog() as iges_format_dialog:
                     if iges_format_dialog.ShowModal() == wx.ID_OK:
-                        extra_info = format = str(iges_format_dialog.selection.GetValue())
-                        exporter = aocxchange.iges.IgesExporter(path, format=format)
+                        extra_info = format_ = str(iges_format_dialog.selection.GetValue())
+                        exporter = aocxchange.iges.IgesExporter(path,
+                                                                format_=format_)
                         for shape in shapes:
                             exporter.add_shape(shape)
                         exporter.write_file()
@@ -199,7 +205,9 @@ def handle_cad_file_save_as(shapes):
                 exporter.write_file()
 
             else:
-                raise ValueError("File extension indicates a file type that is not supported")
+                msg = "File extension indicates a file type " \
+                      "that is not supported"
+                raise ValueError(msg)
 
             return path, type, extra_info
         else:
@@ -221,8 +229,12 @@ if __name__ == "__main__":
             ID_SAVE_CAD = wx.NewId()
 
             tb = self.CreateToolBar()
-            tb.AddLabelTool(id=ID_OPEN_CAD, label='', bitmap=wx.Bitmap('../icons/open.png'))
-            tb.AddLabelTool(id=ID_SAVE_CAD, label='', bitmap=wx.Bitmap('../icons/save-as.png'))
+            tb.AddLabelTool(id=ID_OPEN_CAD,
+                            label='',
+                            bitmap=wx.Bitmap('../icons/open.png'))
+            tb.AddLabelTool(id=ID_SAVE_CAD,
+                            label='',
+                            bitmap=wx.Bitmap('../icons/save-as.png'))
             tb.Realize()
 
             self.Bind(wx.EVT_TOOL, self.on_open_cad, id=ID_OPEN_CAD)
@@ -239,7 +251,7 @@ if __name__ == "__main__":
         def on_save_as_cad(self, event):
             import aocutils.primitives
             box = aocutils.primitives.box(10, 10, 10)
-            cylinder = aocutils.primitives.cylinder(10,30)
+            cylinder = aocutils.primitives.cylinder(10, 30)
             shapes = [box, cylinder]
             print(handle_cad_file_save_as(shapes))
 

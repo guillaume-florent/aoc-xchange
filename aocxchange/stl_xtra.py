@@ -29,7 +29,11 @@ def nb_regions(stl_filepath):
                 # print(line)
                 counter += 1
                 items = line.split()
-                assert len(items) == 2
+                # assert len(items) == 2
+                if len(items) != 2:
+                    msg = "line expected to contain 2 items, found %i" % len(items)
+                    logger.error(msg)
+                    raise AssertionError(msg)
                 # print(items[1])
                 patch_names.append(items[1])
 
@@ -61,7 +65,7 @@ def merge_stls(stls_paths, target_stl_file):
 def scale_stl(stl_in, factor, stl_out):
     r"""Scale an STL file by a given factor
 
-    The strategy of this function is to scale every string that can be 
+    The strategy of this function is to scale every string that can be
     converted to float that is found in the file.
 
     Parameters

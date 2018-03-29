@@ -23,7 +23,7 @@ class Obj(BaseMesh):
 
     def __init__(self, filename=None):
         """Create an instance of Obj (Wavefront)
-        
+
         Parameters
         ----------
         filename : str

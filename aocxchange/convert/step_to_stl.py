@@ -4,7 +4,8 @@ r"""Convert a STEP file to STL file"""
 
 import logging
 
-from os.path import join, dirname, abspath, isfile
+# from os.path import join, dirname, abspath, isfile
+from os.path import isfile
 
 from aocxchange.step import StepImporter
 from aocxchange.stl import StlExporter
@@ -44,13 +45,12 @@ def step_to_stl(step_file_path,
         Write STL in ascii mode if True, in binary mode if False
     multi_shape_mode : int, optional (default is 0 (ONE_SHAPE_PER_FILE)
         Mode to use in case there is more than 1 shape in the STEP file
-        
+
     Returns
     -------
     List of STL files creates, total number of shapes
     If there is only 1 file in the liste and more than 1 shape, it is a STL with
     multiple entities
-        
 
     """
     def shape_to_stl(shape_, stl_file_, scale, ascii_mode_, factor_, use_min_dim_):
@@ -84,8 +84,17 @@ def step_to_stl(step_file_path,
         raise ValueError(msg)
 
     elif len(shapes) == 1:  # 99.9 % of practical cases
-        shape_to_stl(shapes[0], stl_file_path, scale, ascii_mode, factor, use_min_dim)
-        assert isfile(stl_file_path)
+        shape_to_stl(shapes[0],
+                     stl_file_path,
+                     scale,
+                     ascii_mode,
+                     factor,
+                     use_min_dim)
+        # assert isfile(stl_file_path)
+        if not isfile(stl_file_path):
+            msg = "%s was not created" % stl_file_path
+            logger.error(msg)
+            raise ValueError(msg)
         return [stl_file_path], 1
 
     elif len(shapes) > 1:

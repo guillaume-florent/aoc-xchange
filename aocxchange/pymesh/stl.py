@@ -34,7 +34,7 @@ class Stl(BaseMesh):
 
     def __init__(self, filename=None, mode_policy=MODE_AUTO):
         """Create a instance of Stl.
-        
+
         Parameters
         ----------
         filename : str
@@ -108,9 +108,14 @@ class Stl(BaseMesh):
     def __load_binary(fh):
         # Read the triangle count
         count, = struct.unpack("i", fh.read(Stl.COUNT_SIZE))
-        assert count < Stl.MAX_COUNT, \
-            'File too large, got {} triangles ' \
-            'which exceeds the maximum of {}' .format(count, Stl.MAX_COUNT)
+        # assert count < Stl.MAX_COUNT, \
+        #     'File too large, got {} triangles ' \
+        #     'which exceeds the maximum of {}' .format(count, Stl.MAX_COUNT)
+        if count >= Stl.MAX_COUNT:
+            msg = 'File too large, got {} triangles which exceeds ' \
+                  'the maximum of {}' .format(count, Stl.MAX_COUNT)
+            logger.error(msg)
+            raise RuntimeError(msg)
         return numpy.fromfile(fh, Stl.stl_dtype, count=count)
 
     @staticmethod
@@ -196,12 +201,24 @@ class Stl(BaseMesh):
             # buffer and/or StringIO does not work.
             try:
                 normals = get('facet normal')
-                assert get() == 'outer loop'
+                # assert get() == 'outer loop'
+                if get() != 'outer loop':
+                    msg = "get() is different from 'outer_loop'"
+                    logger.error(msg)
+                    raise AssertionError(msg)
                 v0 = get('vertex')
                 v1 = get('vertex')
                 v2 = get('vertex')
-                assert get() == 'endloop'
-                assert get() == 'endfacet'
+                # assert get() == 'endloop'
+                if get() != 'endloop':
+                    msg = "get() is different from 'endloop'"
+                    logger.error(msg)
+                    raise AssertionError(msg)
+                # assert get() == 'endfacet'
+                if get() != 'endfacet':
+                    msg = "get() is different from 'endfacet'"
+                    logger.error(msg)
+                    raise AssertionError(msg)
                 attrs = 0
                 yield (normals, (v0, v1, v2), attrs)
             except AssertionError as e:

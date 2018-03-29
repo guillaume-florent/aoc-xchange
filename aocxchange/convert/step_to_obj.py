@@ -24,14 +24,16 @@ def step_to_obj(step_file_path,
                 use_min_dim=False,
                 remove_intermediate_stl=True):
     r"""Convert a STEP file to a OBJ file
-    
+
     This function uses an intermediate conversion from STEP to STL then from
     STL to OBJ
     
     Parameters
     ----------
-    step_file_path
-    obj_file_path
+    step_file_path : str
+    obj_file_path : str
+    scale : float
+    write_normals : bool
     factor : float
         Meshing factor, optional (default is 4000.)
         The higher, the finer the mesh and the bigger the resulting file
@@ -50,20 +52,22 @@ def step_to_obj(step_file_path,
     # Create a temporary STL file with a random name in tmp dir
     stl_temp_file = abspath(join(tmp_dir, "%s.stl" % uuid.uuid4().hex))
 
-    list_of_files, nb_shapes = step_to_stl(step_file_path,
-                                           stl_temp_file,
-                                           scale,
-                                           factor,
-                                           use_min_dim,
-                                           ascii_mode=True,
-                                           multi_shape_mode=ONE_SHAPE_PER_FILE)
+    list_of_files, _ = step_to_stl(step_file_path,
+                                   stl_temp_file,
+                                   scale,
+                                   factor,
+                                   use_min_dim,
+                                   ascii_mode=True,
+                                   multi_shape_mode=ONE_SHAPE_PER_FILE)
 
     for stl_f in list_of_files:
         # Open STL with pymesh
         mesh = stl.Stl(stl_f)
 
         # Save as OBJ
-        mesh.save_obj(obj_file_path, update_normals=True, write_normals=write_normals)
+        mesh.save_obj(obj_file_path,
+                      update_normals=True,
+                      write_normals=write_normals)
 
     # Delete STL
     if remove_intermediate_stl is True:

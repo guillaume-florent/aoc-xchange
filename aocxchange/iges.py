@@ -130,11 +130,11 @@ class IgesExporter(object):
     format : ["5.1", "5.3"]
 
     """
-    def __init__(self, filename, format="5.1"):
+    def __init__(self, filename, format_="5.1"):
         logger.info("IgesExporter instantiated with filename : %s" % filename)
-        logger.info("IgesExporter format : %s" % format)
+        logger.info("IgesExporter format : %s" % format_)
 
-        if format not in ["5.1", "5.3"]:
+        if format_ not in ["5.1", "5.3"]:
             msg = "Unsupported IGES format"
             logger.error(msg)
             raise aocxchange.exceptions.IgesUnknownFormatException(msg)
@@ -145,7 +145,7 @@ class IgesExporter(object):
         self._shapes = list()
         self._filename = filename
 
-        if format == "5.3":
+        if format_ == "5.3":
             self._brepmode = True
         else:
             self._brepmode = False
