@@ -55,7 +55,7 @@ def step_to_stl(step_file_path,
     """
     def shape_to_stl(shape_, stl_file_, scale, ascii_mode_, factor_, use_min_dim_):
         r"""Write a single shape to an STL file
-        
+    
         Parameters
         ----------
         shape_

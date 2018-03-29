@@ -169,16 +169,17 @@ def handle_cad_file_save_as(shapes):
             extension = aocxchange.utils.extract_file_extension(path)
 
             if extension.lower() in aocxchange.extensions.step_extensions:
-                type = "step"
+                type_ = "step"
                 with StepSchemaDialog() as step_schema_dialog:
                     if step_schema_dialog.ShowModal() == wx.ID_OK:
                         extra_info = schema = str(step_schema_dialog.selection.GetValue())
-                        exporter = aocxchange.step.StepExporter(path, schema=schema)
+                        exporter = aocxchange.step.StepExporter(path,
+                                                                schema=schema)
                         for shape in shapes:
                             exporter.add_shape(shape)
                         exporter.write_file()
             elif extension.lower() in aocxchange.extensions.iges_extensions:
-                type = "iges"
+                type_ = "iges"
                 with IgesFormatDialog() as iges_format_dialog:
                     if iges_format_dialog.ShowModal() == wx.ID_OK:
                         extra_info = format_ = str(iges_format_dialog.selection.GetValue())
@@ -188,16 +189,17 @@ def handle_cad_file_save_as(shapes):
                             exporter.add_shape(shape)
                         exporter.write_file()
             elif extension.lower() in aocxchange.extensions.stl_extensions:
-                type = "stl"
+                type_ = "stl"
                 with StlFormatDialog() as stl_format_dialog:
                     if stl_format_dialog.ShowModal() == wx.ID_OK:
                         extra_info = ascii_mode = True if stl_format_dialog.selection.GetValue() == "ASCII" else False
-                        exporter = aocxchange.stl.StlExporter(path, ascii_mode=ascii_mode)
+                        exporter = aocxchange.stl.StlExporter(path,
+                                                              ascii_mode=ascii_mode)
                         # TODO : warning message if len(shapes) > 1
                         exporter.set_shape(shapes[0])
                         exporter.write_file()
             elif extension.lower() in aocxchange.extensions.brep_extensions:
-                type = "brep"
+                type_ = "brep"
                 extra_info = None
                 exporter = aocxchange.brep.BrepExporter(path)
                 # TODO : warning message if len(shapes) > 1
@@ -209,7 +211,7 @@ def handle_cad_file_save_as(shapes):
                       "that is not supported"
                 raise ValueError(msg)
 
-            return path, type, extra_info
+            return path, type_, extra_info
         else:
             return None, None, None
     # return filepath + type + format/schema

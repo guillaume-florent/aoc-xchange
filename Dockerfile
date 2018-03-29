@@ -33,8 +33,8 @@ RUN git clone https://github.com/guillaume-florent/aoc-utils && \
 # aocxchange
 # the following command invalidates the cache
 # ADD https://api.github.com/repos/guillaume-florent/aoc-xchange/git/refs/heads/master version.json
-RUN cd /tmp && \
-    git clone https://github.com/guillaume-florent/aoc-xchange && \
+WORKDIR /tmp
+RUN git clone https://github.com/guillaume-florent/aoc-xchange && \
     cp -r /tmp/aoc-xchange/aocxchange /usr/local/lib/python2.7/site-packages
 
 RUN cp /tmp/aoc-xchange/bin/step_to_obj /usr/local/bin && \

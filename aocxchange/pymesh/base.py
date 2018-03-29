@@ -239,11 +239,11 @@ class BaseMesh(object):
     @staticmethod
     def __calc_signed_volume(triangle):
         """ Calculate signed volume of given triangle
-        
+
         Parameters
         ----------
         triangle : list[list]
-        
+
         Returns
         -------
         float

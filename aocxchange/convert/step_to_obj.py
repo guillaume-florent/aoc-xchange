@@ -27,7 +27,7 @@ def step_to_obj(step_file_path,
 
     This function uses an intermediate conversion from STEP to STL then from
     STL to OBJ
-    
+
     Parameters
     ----------
     step_file_path : str
