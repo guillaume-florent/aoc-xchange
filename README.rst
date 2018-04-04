@@ -1,18 +1,17 @@
 .. -*- coding: utf-8 -*-
 
+***********
 aoc-xchange
-===========
+***********
+
+.. image:: https://travis-ci.org/guillaume-florent/aoc-xchange.svg?branch=master
+    :target: https://travis-ci.org/guillaume-florent/aoc-xchange
 
 .. image:: https://api.codacy.com/project/badge/Grade/10428d668bc94d10a96a39a200dfd843
-   :target: https://www.codacy.com/app/guillaume-florent/aoc-xchange?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-xchange&amp;utm_campaign=Badge_Grade
-.. image:: http://img.shields.io/badge/Status-development-ff3300.svg
-   :alt: Development
-.. image:: http://img.shields.io/badge/license-GPL_v3-blue.svg
-   :target: https://www.gnu.org/copyleft/gpl.html
-   :alt: GPL v3
+    :target: https://www.codacy.com/app/guillaume-florent/aoc-xchange?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-xchange&amp;utm_campaign=Badge_Grade
+
 .. image:: http://img.shields.io/badge/Python-2.7_3.*-ff3366.svg
-   :target: https://www.python.org/downloads/
-   :alt: Python 2.7 3.*
+    :target: https://www.python.org/downloads/
 
 The **aoc-xchange** project provides a Python package named **aocxchange** to read and write
 from/to IGES, STEP, BREP, and STL files using `PythonOCC <http://www.pythonocc.org/>`_.
