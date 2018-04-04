@@ -1,41 +1,16 @@
-# Ubuntu 14.04 LTS Server Edition 64 bit
-dist: trusty
+sudo: required
 
-python:
-  - "2.7"
-  # - "3.4" pythonocc conda install not possible for 3.* yet
+git:
+  depth: 3
 
-# Setup anaconda
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  # Useful for debugging any issues with conda
-  - conda info -a
-  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
-  - sudo rm -rf /dev/shm
-  - sudo ln -s /run/shm /dev/shm
+services:
+  - docker
 
 install:
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy
-  - source activate test-environment
-  - conda install -c https://conda.anaconda.org/dlr-sc pythonocc-core
-  # - pip install -r requirements.txt
-  - pip install pytest pytest-cov
-  - pip install coveralls
-  - python setup.py install
+  - docker build --tag guillaume-florent/aocxchange:latest .
 
 script:
-  - py.test
+  - docker run --name aocxchange guillaume-florent/aocxchange:latest /bin/bash -c "cd /opt/aoc-xchange;pytest tests/"
 
-after_success:
-  coveralls --config_file .coveragerc
+after_script:
+  - docker images

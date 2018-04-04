@@ -1,45 +1,35 @@
-#
-# Build :
-# docker build --tag aocxchange:latest .
-#
-# Run :
-# docker run -ti aocxchange:latest
-#
-#################################################
-# FROM continuumio/miniconda
-# FROM show0k/alpine-miniconda
-FROM continuumio/miniconda3:4.4.10
+FROM guillaumeflorent/miniconda-pythonocc:3-0.18.3
 
 MAINTAINER Guillaume Florent <florentsailing@gmail.com>
 
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-# numpy + PythonOCC
 RUN conda install -y numpy
-RUN conda install -c conda-forge -c dlr-sc -c pythonocc -c oce pythonocc-core==0.18 python=2
+RUN conda install -c gflorent corelib
 
-# corelib (used by aocutils)
-WORKDIR /tmp
-RUN git clone https://github.com/fullmar/corelib && \
-    cp -r /tmp/corelib/corelib /usr/local/lib/python2.7/site-packages
+RUN apt-get update && apt-get install -y libgtk2.0-0 && rm -rf /var/lib/apt/lists/*
+RUN conda install -y -c anaconda wxpython
 
-# aocutils
-# the following command invalidates the cache
-# ADD https://api.github.com/repos/guillaume-florent/aoc-utils/git/refs/heads/master version.json
-WORKDIR /tmp
-RUN git clone https://github.com/guillaume-florent/aoc-utils && \
-    cp -r /tmp/aoc-utils/aocutils /usr/local/lib/python2.7/site-packages
+RUN conda install -y pyqt
+RUN apt-get update && apt-get install -y libgl1-mesa-dev libx11-xcb1 && rm -rf /var/lib/apt/lists/*
+
+# aoc-utils
+# TODO : use setup.py or conda package
+WORKDIR /opt
+ADD https://api.github.com/repos/guillaume-florent/aoc-utils/git/refs/heads/master version.json
+RUN git clone --depth=1 https://github.com/guillaume-florent/aoc-utils
+RUN cp -r /opt/aoc-utils/aocutils /opt/conda/lib/python3.6/site-packages
 
 # aocxchange
-# the following command invalidates the cache
-# ADD https://api.github.com/repos/guillaume-florent/aoc-xchange/git/refs/heads/master version.json
-WORKDIR /tmp
-RUN git clone https://github.com/guillaume-florent/aoc-xchange && \
-    cp -r /tmp/aoc-xchange/aocxchange /usr/local/lib/python2.7/site-packages
+# TODO : use setup.py
+ADD https://api.github.com/repos/guillaume-florent/aoc-xchange/git/refs/heads/master version.json
+RUN git clone --depth=1 https://github.com/guillaume-florent/aoc-xchange
+RUN cp -r /opt/aoc-xchange/aocxchange /opt/conda/lib/python3.6/site-packages
 
-RUN cp /tmp/aoc-xchange/bin/step_to_obj /usr/local/bin && \
-    cp /tmp/aoc-xchange/bin/step_to_stl /usr/local/bin && \
+RUN cp /opt/aoc-xchange/bin/step_to_obj /usr/local/bin && \
+    cp /opt/aoc-xchange/bin/step_to_stl /usr/local/bin && \
     chmod +x /usr/local/bin/step_to_stl && \
     chmod +x /usr/local/bin/step_to_obj
 
-CMD ["/bin/bash"]
+
+
