@@ -4,7 +4,7 @@ MAINTAINER Guillaume Florent <florentsailing@gmail.com>
 
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-RUN conda install -y numpy
+RUN conda install -y numpy pytest
 RUN conda install -c gflorent corelib
 
 RUN apt-get update && apt-get install -y libgtk2.0-0 && rm -rf /var/lib/apt/lists/*
