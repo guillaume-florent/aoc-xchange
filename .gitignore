@@ -61,3 +61,4 @@ target/
 /tests/models_out/box.IgS
 /tests/models_out/box.stp
 /tests/models_out/box.StP
+/.pytest-cache
