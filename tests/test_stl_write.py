@@ -6,7 +6,6 @@ r"""STL file writing tests"""
 import pytest
 import os.path
 import glob
-import logging
 
 import OCC.BRepPrimAPI
 import OCC.gp
@@ -17,9 +16,6 @@ import aocutils.topology
 import aocxchange.exceptions
 import aocxchange.stl
 import aocxchange.utils
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
 
 
 @pytest.yield_fixture(autouse=True)
