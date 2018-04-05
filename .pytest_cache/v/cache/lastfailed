@@ -1,0 +1,5 @@
+{
+  "tests/test_stl_write.py::test_stl_exporter_happy_path": true,
+  "tests/test_stl_write.py::test_stl_exporter_happy_path_shape_subclass": true,
+  "tests/test_stl_write.py::test_stl_exporter_overwrite": true
+}

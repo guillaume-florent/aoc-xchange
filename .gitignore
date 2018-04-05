@@ -57,3 +57,7 @@ docs/_build/
 
 # PyBuilder
 target/
+/tests/models_out/box.igs
+/tests/models_out/box.IgS
+/tests/models_out/box.stp
+/tests/models_out/box.StP

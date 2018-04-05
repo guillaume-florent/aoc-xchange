@@ -56,7 +56,8 @@ def test_stl_exporter_wrong_extension(box_shape):
 
 
 def test_stl_exporter_adding_not_a_shape(box_shape):
-    r"""Adding something to the exporter that is not a TopoDS_Shape or a subclass"""
+    r"""Adding something to the exporter that is not a
+    TopoDS_Shape or a subclass"""
     filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.stl")
     exporter = aocxchange.stl.StlExporter(filename)
     with pytest.raises(ValueError):
