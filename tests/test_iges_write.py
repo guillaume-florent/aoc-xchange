@@ -26,8 +26,9 @@ def cleandir():
     yield represents the function call
     """
     yield  # represents the test function call
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models_out")
-    files = glob.glob(output_dir + "\*")
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "models_out")
+    files = glob.glob(output_dir + r"\*")
     print("Cleaning output directory ...")
     for f in files:
         os.remove(f)
@@ -42,27 +43,31 @@ def box_shape():
 
 def test_iges_exporter_wrong_filename(box_shape):
     r"""Trying to write to a non-existent directory"""
-    filename = aocxchange.utils.path_from_file(__file__, "./nonexistent/box.igs")
+    filename = aocxchange.utils.path_from_file(__file__,
+                                               "./nonexistent/box.igs")
     with pytest.raises(aocxchange.exceptions.DirectoryNotFoundException):
         aocxchange.iges.IgesExporter(filename)
 
 
 def test_iges_exporter_wrong_extension(box_shape):
     r"""Trying to write a step file with the IgesExporter"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.step")
+    filename = aocxchange.utils.path_from_file(__file__,
+                                               "./models_out/box.step")
     with pytest.raises(aocxchange.exceptions.IncompatibleFileFormatException):
         aocxchange.iges.IgesExporter(filename)
 
 
 def test_iges_exporter_wrong_format(box_shape):
     r"""Format is not 5.1 or 5.3"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.igs")
+    filename = aocxchange.utils.path_from_file(__file__,
+                                               "./models_out/box.igs")
     with pytest.raises(aocxchange.exceptions.IgesUnknownFormatException):
         aocxchange.iges.IgesExporter(filename, format_="48.3")
 
 
 def test_iges_exporter_adding_not_a_shape(box_shape):
-    r"""Adding something to the exporter that is not a TopoDS_Shape or a subclass"""
+    r"""Adding something to the exporter that is not a TopoDS_Shape 
+    or a subclass"""
     filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.igs")
     exporter = aocxchange.iges.IgesExporter(filename)
     with pytest.raises(ValueError):

@@ -30,8 +30,9 @@ def cleandir():
     yield represents the function call
     """
     yield  # represents the test function call
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models_out")
-    files = glob.glob(output_dir + "\*")
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              "models_out")
+    files = glob.glob(output_dir + r"\*")
     print("Cleaning output directory ...")
     for f in files:
         os.remove(f)
