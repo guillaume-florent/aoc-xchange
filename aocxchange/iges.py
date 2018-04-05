@@ -127,7 +127,7 @@ class IgesExporter(object):
     Parameters
     ----------
     filename : str
-    format : ["5.1", "5.3"]
+    format_ : ["5.1", "5.3"]
 
     """
     def __init__(self, filename, format_="5.1"):
@@ -139,7 +139,7 @@ class IgesExporter(object):
             logger.error(msg)
             raise aocxchange.exceptions.IgesUnknownFormatException(msg)
 
-        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.iges_extensions)
+        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.iges_extensions, create_directory=True)
         aocxchange.checks.check_overwrite(filename)
 
         self._shapes = list()
@@ -158,7 +158,8 @@ class IgesExporter(object):
         a_shape : TopoDS_Shape or subclass
 
         """
-        aocxchange.checks.check_shape(a_shape)  # raises an exception if the shape is not valid
+        # raises an exception if the shape is not valid
+        aocxchange.checks.check_shape(a_shape)
         self._shapes.append(a_shape)
 
     def write_file(self):

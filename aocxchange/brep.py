@@ -65,7 +65,7 @@ class BrepExporter(object):
     def __init__(self, filename=None):
         logger.info("BrepExporter instantiated with filename : %s" % filename)
 
-        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.brep_extensions)
+        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.brep_extensions, create_directory=True)
         aocxchange.checks.check_overwrite(filename)
 
         self._shape = None  # only one shape can be exported

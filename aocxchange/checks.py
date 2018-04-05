@@ -10,7 +10,7 @@ import warnings
 import OCC.TopoDS
 
 import aocxchange.exceptions
-import aocxchange.utils
+from aocxchange.utils import extract_file_extension
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,8 @@ def check_importer_filename(filename, allowed_extensions="*"):
 
     Checks that:
     - the file exists
-    - the file extension is one of the extensions in allowed extensions (case insensitive check)
+    - the file extension is one of the extensions in allowed extensions
+      (case insensitive check)
 
     Parameters
     ----------
@@ -52,12 +53,15 @@ def check_importer_filename(filename, allowed_extensions="*"):
     logger.info("Filename passed checks")
 
 
-def check_exporter_filename(filename, allowed_extensions="*", create_directory=False):
+def check_exporter_filename(filename,
+                            allowed_extensions="*",
+                            create_directory=False):
     r"""Check the filename is ok for exporting
 
     Checks that:
     - the directory in the filename exists
-    - the file extension is one of the extensions in allowed extensions (case insensitive check)
+    - the file extension is one of the extensions in allowed extensions
+      (case insensitive check)
 
     Parameters
     ----------
@@ -77,7 +81,8 @@ def check_exporter_filename(filename, allowed_extensions="*", create_directory=F
     aocxchange.exceptions.IncompatibleFileFormatException
         if the extension is not in allowed extensions
     OSError
-        if create directory is True and the inexistent directory cannot be created
+        if create directory is True and the inexistent directory
+        cannot be created
 
     """
     # Check the output directory exists
@@ -99,8 +104,9 @@ def check_exporter_filename(filename, allowed_extensions="*", create_directory=F
 
 
 def _check_extension(filename, allowed_extensions):
-    r"""Check that the extension extracted from filename is in allowed extensions"""
-    if aocxchange.utils.extract_file_extension(filename).lower() not in allowed_extensions:
+    r"""Check that the extension extracted from filename
+    is in allowed extensions"""
+    if extract_file_extension(filename).lower() not in allowed_extensions:
         msg = "Accepted extensions are %s" % str(allowed_extensions)
         logger.error(msg)
         raise aocxchange.exceptions.IncompatibleFileFormatException(msg)

@@ -149,7 +149,7 @@ class StepExporter(object):
             logger.error(msg)
             raise aocxchange.exceptions.StepUnknownSchemaException(msg)
 
-        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.step_extensions)
+        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.step_extensions, create_directory=True)
         aocxchange.checks.check_overwrite(filename)
 
         self._filename = filename
