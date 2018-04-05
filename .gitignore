@@ -64,3 +64,4 @@ target/
 /.pytest-cache
 /tests/models_out/box.sTl
 /tests/models_out/box.stl
+/.pytest_cache/
