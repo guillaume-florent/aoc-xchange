@@ -67,7 +67,7 @@ class StlExporter(object):
         logger.info("StlExporter ascii : %s" % str(ascii_mode))
 
         aocxchange.checks.check_exporter_filename(filename,
-                                                  aocxchange.extensions.stl_extensions, create_directory=True)
+                                                  aocxchange.extensions.stl_extensions)
         aocxchange.checks.check_overwrite(filename)
 
         self._shape = None  # only one shape can be exported

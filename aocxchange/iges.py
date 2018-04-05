@@ -139,7 +139,7 @@ class IgesExporter(object):
             logger.error(msg)
             raise aocxchange.exceptions.IgesUnknownFormatException(msg)
 
-        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.iges_extensions, create_directory=True)
+        aocxchange.checks.check_exporter_filename(filename, aocxchange.extensions.iges_extensions)
         aocxchange.checks.check_overwrite(filename)
 
         self._shapes = list()
