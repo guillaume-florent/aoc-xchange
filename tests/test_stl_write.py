@@ -7,15 +7,16 @@ import pytest
 import os.path
 import glob
 
-import OCC.BRepPrimAPI
-import OCC.gp
-import OCC.TopoDS
+from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.gp import gp_Pnt
+from OCC.TopoDS import TopoDS_Solid
 
-import aocutils.topology
+from aocutils.topology import Topo, shape_to_topology
 
-import aocxchange.exceptions
-import aocxchange.stl
-import aocxchange.utils
+from aocxchange.exceptions import DirectoryNotFoundException, \
+    IncompatibleFileFormatException
+from aocxchange.stl import StlImporter, StlExporter
+from aocxchange.utils import path_from_file
 
 
 @pytest.yield_fixture(autouse=True)
@@ -38,36 +39,36 @@ def cleandir():
 @pytest.fixture()
 def box_shape():
     r"""Box shape for testing"""
-    return OCC.BRepPrimAPI.BRepPrimAPI_MakeBox(10, 20, 30).Shape()
+    return BRepPrimAPI_MakeBox(10, 20, 30).Shape()
 
 
 def test_stl_exporter_wrong_filename(box_shape):
     r"""Trying to write to a non-existent directory"""
-    filename = aocxchange.utils.path_from_file(__file__, "./nonexistent/box.stl")
-    with pytest.raises(aocxchange.exceptions.DirectoryNotFoundException):
-        aocxchange.stl.StlExporter(filename)
+    filename = path_from_file(__file__, "./nonexistent/box.stl")
+    with pytest.raises(DirectoryNotFoundException):
+        StlExporter(filename)
 
 
 def test_stl_exporter_wrong_extension(box_shape):
     r"""Trying to write a step file with the IgesExporter"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.step")
-    with pytest.raises(aocxchange.exceptions.IncompatibleFileFormatException):
-        aocxchange.stl.StlExporter(filename)
+    filename = path_from_file(__file__, "./models_out/box.step")
+    with pytest.raises(IncompatibleFileFormatException):
+        StlExporter(filename)
 
 
 def test_stl_exporter_adding_not_a_shape(box_shape):
     r"""Adding something to the exporter that is not a
     TopoDS_Shape or a subclass"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.stl")
-    exporter = aocxchange.stl.StlExporter(filename)
+    filename = path_from_file(__file__, "./models_out/box.stl")
+    exporter = StlExporter(filename)
     with pytest.raises(ValueError):
-        exporter.set_shape(OCC.gp.gp_Pnt(1, 1, 1))
+        exporter.set_shape(gp_Pnt(1, 1, 1))
 
 
 def test_stl_exporter_happy_path(box_shape):
     r"""Happy path"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.sTl")
-    exporter = aocxchange.stl.StlExporter(filename)
+    filename = path_from_file(__file__, "./models_out/box.sTl")
+    exporter = StlExporter(filename)
     exporter.set_shape(box_shape)
     exporter.write_file()
     assert os.path.isfile(filename)
@@ -76,10 +77,10 @@ def test_stl_exporter_happy_path(box_shape):
 
 def test_stl_exporter_happy_path_shape_subclass(box_shape):
     r"""Happy path with a subclass of TopoDS_Shape"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.stl")
-    exporter = aocxchange.stl.StlExporter(filename)
-    solid = aocutils.topology.shape_to_topology(box_shape)
-    assert isinstance(solid, OCC.TopoDS.TopoDS_Solid)
+    filename = path_from_file(__file__, "./models_out/box.stl")
+    exporter = StlExporter(filename)
+    solid = shape_to_topology(box_shape)
+    assert isinstance(solid, TopoDS_Solid)
     exporter.set_shape(solid)
     exporter.write_file()
     assert os.path.isfile(filename)
@@ -87,38 +88,40 @@ def test_stl_exporter_happy_path_shape_subclass(box_shape):
 
 def test_stl_exporter_overwrite(box_shape):
     r"""Happy path with a subclass of TopoDS_Shape"""
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.stl")
-    exporter = aocxchange.stl.StlExporter(filename)
-    solid = aocutils.topology.shape_to_topology(box_shape)
-    assert isinstance(solid, OCC.TopoDS.TopoDS_Solid)
+    filename = path_from_file(__file__, "./models_out/box.stl")
+    exporter = StlExporter(filename)
+    solid = shape_to_topology(box_shape)
+    assert isinstance(solid, TopoDS_Solid)
     exporter.set_shape(solid)
     exporter.write_file()
     assert os.path.isfile(filename)
 
     # read the written box.stl
-    importer = aocxchange.stl.StlImporter(filename)
-    topo = aocutils.topology.Topo(importer.shape)
+    importer = StlImporter(filename)
+    topo = Topo(importer.shape)
     assert topo.number_of_shells == 1
 
     # set a sphere and write again with same exporter
-    sphere = OCC.BRepPrimAPI.BRepPrimAPI_MakeSphere(10)
+    sphere = BRepPrimAPI_MakeSphere(10)
     exporter.set_shape(sphere.Shape())
-    exporter.write_file()  # this creates a file with a sphere only, this is STL specific
+
+    # this creates a file with a sphere only, this is STL specific
+    exporter.write_file()
 
     # check that the file contains the sphere only
-    importer = aocxchange.stl.StlImporter(filename)
-    topo = aocutils.topology.Topo(importer.shape)
+    importer = StlImporter(filename)
+    topo = Topo(importer.shape)
     assert topo.number_of_shells == 1
 
     # create a new exporter and overwrite with a box only
-    filename = aocxchange.utils.path_from_file(__file__, "./models_out/box.stl")
-    exporter = aocxchange.stl.StlExporter(filename)
-    solid = aocutils.topology.shape_to_topology(box_shape)
+    filename = path_from_file(__file__, "./models_out/box.stl")
+    exporter = StlExporter(filename)
+    solid = shape_to_topology(box_shape)
     exporter.set_shape(solid)
     exporter.write_file()
     assert os.path.isfile(filename)
 
     # check the file only contains a box
-    importer = aocxchange.stl.StlImporter(filename)
-    topo = aocutils.topology.Topo(importer.shape)
+    importer = StlImporter(filename)
+    topo = Topo(importer.shape)
     assert topo.number_of_shells == 1

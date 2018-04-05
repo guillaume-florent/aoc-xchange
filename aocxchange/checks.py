@@ -6,9 +6,10 @@ import os.path
 import logging
 import warnings
 
-import OCC.TopoDS
+from OCC.TopoDS import TopoDS_Shape
 
-import aocxchange.exceptions
+from aocxchange.exceptions import FileNotFoundException, \
+    DirectoryNotFoundException, IncompatibleFileFormatException
 from aocxchange.utils import extract_file_extension
 
 logger = logging.getLogger(__name__)
@@ -41,7 +42,7 @@ def check_importer_filename(filename, allowed_extensions="*"):
     if not os.path.isfile(filename):
         msg = "Importer error : file %s not found." % filename
         logger.error(msg)
-        raise aocxchange.exceptions.FileNotFoundException(msg)
+        raise FileNotFoundException(msg)
     else:
         logger.debug("File to import exists")
 
@@ -91,7 +92,7 @@ def check_exporter_filename(filename,
         else:
             msg = "Exporter error : Output directory does not exist"
             logger.error(msg)
-            raise aocxchange.exceptions.DirectoryNotFoundException(msg)
+            raise DirectoryNotFoundException(msg)
     else:
         logger.debug("Directory to export to exists")
 
@@ -108,7 +109,7 @@ def _check_extension(filename, allowed_extensions):
     if extract_file_extension(filename).lower() not in allowed_extensions:
         msg = "Accepted extensions are %s" % str(allowed_extensions)
         logger.error(msg)
-        raise aocxchange.exceptions.IncompatibleFileFormatException(msg)
+        raise IncompatibleFileFormatException(msg)
     else:
         logger.debug("Extension is ok")
 
@@ -141,15 +142,17 @@ def check_shape(a_shape):
 
     Parameters
     ----------
-    a_shape : OCC.TopoDS.TopoDS_Shape or subclass
+    a_shape : TopoDS_Shape or subclass
 
     Returns
     -------
     bool
         True if all tests passed, raises an exception otherwise
     """
-    if not isinstance(a_shape, OCC.TopoDS.TopoDS_Shape) and not issubclass(a_shape.__class__, OCC.TopoDS.TopoDS_Shape):
-        msg = "Expecting a TopoDS_Shape or subclass, got a %s" % a_shape.__class__
+    if not isinstance(a_shape, TopoDS_Shape) and not issubclass(a_shape.__class__,
+                                                                TopoDS_Shape):
+        msg = "Expecting a TopoDS_Shape or subclass, " \
+              "got a %s" % a_shape.__class__
         logger.error(msg)
         raise ValueError(msg)
 

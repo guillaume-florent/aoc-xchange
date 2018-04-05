@@ -6,27 +6,30 @@ from __future__ import print_function
 
 import logging
 
-import OCC.BRep
-import OCC.IFSelect
-import OCC.Interface
-import OCC.Quantity
-import OCC.STEPCAFControl
-import OCC.STEPControl
-import OCC.TCollection
-import OCC.TColStd
-import OCC.TDF
-import OCC.TDocStd
-import OCC.TopAbs
-import OCC.TopoDS
-import OCC.XCAFApp
-import OCC.XCAFDoc
-import OCC.XSControl
+# import OCC.BRep
+from OCC.IFSelect import IFSelect_RetDone
+# import OCC.Interface
+from OCC.Quantity import Quantity_Color, Quantity_NOC_RED
+from OCC.STEPCAFControl import STEPCAFControl_Reader, STEPCAFControl_Writer
+from OCC.STEPControl import STEPControl_AsIs
+from OCC.TCollection import TCollection_ExtendedString
+# import OCC.TColStd
+from OCC.TDF import TDF_LabelSequence
+from OCC.TDocStd import Handle_TDocStd_Document
+from OCC.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
+# import OCC.TopoDS
+from OCC.XCAFApp import _XCAFApp
+from OCC.XCAFDoc import XCAFDoc_ColorSurf, XCAFDoc_ColorGen, \
+    XCAFDoc_DocumentTool
+from OCC.XSControl import XSControl_WorkSession
 
-import aocutils.topology
+from aocutils.topology import Topo
 
-import aocxchange.checks
-import aocxchange.exceptions
-import aocxchange.extensions
+from aocxchange.checks import check_importer_filename, check_exporter_filename,\
+    check_overwrite, check_shape
+from aocxchange.exceptions import StepFileWriteException, \
+    StepShapeTransferException
+from aocxchange.extensions import step_extensions
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +38,7 @@ class StepOcafImporter(object):
     r"""Imports STEP file that support layers & colors"""
     def __init__(self, filename):
 
-        aocxchange.checks.check_importer_filename(filename, aocxchange.extensions.step_extensions)
+        check_importer_filename(filename, step_extensions)
 
         self.filename = filename
 
@@ -66,7 +69,8 @@ class StepOcafImporter(object):
     def layers_str(self):
         r"""Returns a readable list of layers in the same order as self._shapes
 
-        If self.shapes = [shape_1, shape_2], layers_str will return ['red', 'green'] when shape_1 is on the "red" layer
+        If self.shapes = [shape_1, shape_2], layers_str will
+                     return ['red', 'green'] when shape_1 is on the "red" layer
         and shape_2 is on the 'green' layer.
 
         See Also
@@ -90,20 +94,20 @@ class StepOcafImporter(object):
     def read_file(self):
         r"""Read file"""
         logger.info("Reading STEP file")
-        h_doc = OCC.TDocStd.Handle_TDocStd_Document()
+        h_doc = Handle_TDocStd_Document()
 
         # Create the application
-        app = OCC.XCAFApp._XCAFApp.XCAFApp_Application_GetApplication().GetObject()
-        app.NewDocument(OCC.TCollection.TCollection_ExtendedString("MDTV-CAF"), h_doc)
+        app = _XCAFApp.XCAFApp_Application_GetApplication().GetObject()
+        app.NewDocument(TCollection_ExtendedString("MDTV-CAF"), h_doc)
 
         # Get root assembly
         doc = h_doc.GetObject()
-        h_shape_tool = OCC.XCAFDoc.XCAFDoc_DocumentTool().ShapeTool(doc.Main())
-        color_tool = OCC.XCAFDoc.XCAFDoc_DocumentTool().ColorTool(doc.Main())
-        layer_tool = OCC.XCAFDoc.XCAFDoc_DocumentTool().LayerTool(doc.Main())
-        _ = OCC.XCAFDoc.XCAFDoc_DocumentTool().MaterialTool(doc.Main())
+        h_shape_tool = XCAFDoc_DocumentTool().ShapeTool(doc.Main())
+        color_tool = XCAFDoc_DocumentTool().ColorTool(doc.Main())
+        layer_tool = XCAFDoc_DocumentTool().LayerTool(doc.Main())
+        _ = XCAFDoc_DocumentTool().MaterialTool(doc.Main())
 
-        step_reader = OCC.STEPCAFControl.STEPCAFControl_Reader()
+        step_reader = STEPCAFControl_Reader()
         step_reader.SetColorMode(True)
         step_reader.SetLayerMode(True)
         step_reader.SetNameMode(True)
@@ -111,12 +115,12 @@ class StepOcafImporter(object):
 
         status = step_reader.ReadFile(str(self.filename))
 
-        if status == OCC.IFSelect.IFSelect_RetDone:
+        if status == IFSelect_RetDone:
             logger.info("Transfer doc to STEPCAFControl_Reader")
             step_reader.Transfer(doc.GetHandle())
 
-        labels = OCC.TDF.TDF_LabelSequence()
-        _ = OCC.TDF.TDF_LabelSequence()
+        labels = TDF_LabelSequence()
+        _ = TDF_LabelSequence()
         # TopoDS_Shape a_shape;
         _ = h_shape_tool.GetObject()
         h_shape_tool.GetObject().GetFreeShapes(labels)
@@ -126,12 +130,15 @@ class StepOcafImporter(object):
         # for i in range(labels.Length()):
         #     a_shape = h_shape_tool.GetObject().GetShape(labels.Value(i+1))
         #     logger.debug("%i - type : %s" % (i, a_shape.ShapeType()))
-        #     sub_shapes_labels = OCC.TDF.TDF_LabelSequence()
+        #     sub_shapes_labels = TDF_LabelSequence()
         #     print("Is Assembly?", shape_tool.IsAssembly(labels.Value(i + 1)))
-        #     # sub_shapes = shape_tool.getsubshapes(labels.Value(i+1), sub_shapes_labels)
+        #     # sub_shapes = shape_tool.getsubshapes(labels.Value(i+1),
+        #                                            sub_shapes_labels)
         #
-        #     sub_shapes = shape_tool.FindSubShape(labels.Value(i + 1), a_shape, labels.Value(i + 1))
-        #     print('Number of subshapes in the assembly : %i' % sub_shapes_labels.Length())
+        #     sub_shapes = shape_tool.FindSubShape(labels.Value(i + 1),
+        #                                          a_shape, labels.Value(i + 1))
+        #     print('Number of subshapes in the assembly : %i' %
+        #                                            sub_shapes_labels.Length())
         #
         # color_tool.GetObject().GetColors(color_labels)
         # logger.info('Number of colors : %i' % color_labels.Length())
@@ -142,26 +149,26 @@ class StepOcafImporter(object):
             logger.debug("Label : %s" % label)
             a_shape = h_shape_tool.GetObject().GetShape(labels.Value(i+1))
 
-            # string_seq = OCC.TColStd.TColStd_HSequenceOfExtendedString()
-            # string_seq is an OCC.TColStd.TColStd_HSequenceOfExtendedString
+            # string_seq = TColStd_HSequenceOfExtendedString()
+            # string_seq is an TColStd_HSequenceOfExtendedString
             string_seq = layer_tool.GetObject().GetLayers(a_shape)
-            color = OCC.Quantity.Quantity_Color()
+            color = Quantity_Color()
             _ = color_tool.GetObject().GetColor(a_shape,
-                                                OCC.XCAFDoc.XCAFDoc_ColorSurf,
+                                                XCAFDoc_ColorSurf,
                                                 color)
 
             logger.info("The shape type is : %i" % a_shape.ShapeType())
-            if a_shape.ShapeType() == OCC.TopAbs.TopAbs_COMPOUND:
-                logger.info("The shape type is OCC.TopAbs.TopAbs_COMPOUND")
-                topo = aocutils.topology.Topo(a_shape)
+            if a_shape.ShapeType() == TopAbs_COMPOUND:
+                logger.info("The shape type is TopAbs_COMPOUND")
+                topo = Topo(a_shape)
                 logger.info("Nb of compounds : %i" % topo.number_of_compounds)
                 logger.info("Nb of solids : %i" % topo.number_of_solids)
                 logger.info("Nb of shells : %i" % topo.number_of_shells)
                 for solid in topo.solids:
                     logger.info("Adding solid to the shapes list")
                     self._shapes.append(solid)
-            elif a_shape.ShapeType() == OCC.TopAbs.TopAbs_SOLID:
-                logger.info("The shape type is OCC.TopAbs.TopAbs_SOLID")
+            elif a_shape.ShapeType() == TopAbs_SOLID:
+                logger.info("The shape type is TopAbs_SOLID")
                 self._shapes.append(a_shape)
                 self._colors.append(color)
                 self._layers.append(string_seq)
@@ -172,29 +179,29 @@ class StepOcafImporter(object):
 class StepOcafExporter(object):
     r"""STEP export that support layers & colors"""
     def __init__(self, filename, layer_name='layer-00'):
-        logger.info("StepOcafExporter instantiated with filename : %s" % filename)
+        logger.info("StepOcafExporter instantiated with "
+                    "filename : %s" % filename)
 
-        aocxchange.checks.check_exporter_filename(filename,
-                                                  aocxchange.extensions.step_extensions)
-        aocxchange.checks.check_overwrite(filename)
+        check_exporter_filename(filename, step_extensions)
+        check_overwrite(filename)
 
         self.filename = filename
-        self.h_doc = h_doc = OCC.TDocStd.Handle_TDocStd_Document()
+        self.h_doc = h_doc = Handle_TDocStd_Document()
         # logger.info("Empty Doc?", h_doc.IsNull())
         if h_doc.IsNull():
             logger.info("Empty Doc?")
 
         # Create the application
-        app = OCC.XCAFApp._XCAFApp.XCAFApp_Application_GetApplication().GetObject()
-        app.NewDocument(OCC.TCollection.TCollection_ExtendedString("MDTV-CAF"), h_doc)
+        app = _XCAFApp.XCAFApp_Application_GetApplication().GetObject()
+        app.NewDocument(TCollection_ExtendedString("MDTV-CAF"), h_doc)
 
         # Get root assembly
         doc = h_doc.GetObject()
-        h_shape_tool = OCC.XCAFDoc.XCAFDoc_DocumentTool().ShapeTool(doc.Main())
-        l_colors = OCC.XCAFDoc.XCAFDoc_DocumentTool().ColorTool(doc.Main())
-        l_layers = OCC.XCAFDoc.XCAFDoc_DocumentTool().LayerTool(doc.Main())
-        _ = OCC.TDF.TDF_LabelSequence()
-        _ = OCC.TDF.TDF_LabelSequence()
+        h_shape_tool = XCAFDoc_DocumentTool().ShapeTool(doc.Main())
+        l_colors = XCAFDoc_DocumentTool().ColorTool(doc.Main())
+        l_layers = XCAFDoc_DocumentTool().LayerTool(doc.Main())
+        _ = TDF_LabelSequence()
+        _ = TDF_LabelSequence()
         # TopoDS_Shape aShape;
 
         self.shape_tool = h_shape_tool.GetObject()
@@ -202,8 +209,8 @@ class StepOcafExporter(object):
         self.colors = l_colors.GetObject()
         self.layers = l_layers.GetObject()
 
-        self.current_color = OCC.Quantity.Quantity_Color(OCC.Quantity.Quantity_NOC_RED)
-        self.current_layer = self.layers.AddLayer(OCC.TCollection.TCollection_ExtendedString(layer_name))
+        self.current_color = Quantity_Color(Quantity_NOC_RED)
+        self.current_layer = self.layers.AddLayer(TCollection_ExtendedString(layer_name))
         self.layer_names = {}
 
     def set_color(self, r=1, g=1, b=1, color=None):
@@ -214,13 +221,13 @@ class StepOcafExporter(object):
         r : float
         g : float
         b : float
-        color : OCC.Quantity.Quantity_Color
+        color : Quantity_Color
 
         """
         if color is not None:
             self.current_color = color
         else:
-            clr = OCC.Quantity.Quantity_Color(r, g, b, 0)
+            clr = Quantity_Color(r, g, b, 0)
             self.current_color = clr
 
     def set_layer(self, layer_name):
@@ -237,7 +244,7 @@ class StepOcafExporter(object):
         if layer_name in self.layer_names:
             self.current_layer = self.layer_names[layer_name]
         else:
-            self.current_layer = self.layers.AddLayer(OCC.TCollection.TCollection_ExtendedString(layer_name))
+            self.current_layer = self.layers.AddLayer(TCollection_ExtendedString(layer_name))
             self.layer_names[layer_name] = self.current_layer
 
     def add_shape(self, shape, color=None, layer=None):
@@ -259,16 +266,16 @@ class StepOcafExporter(object):
 
         """
         # raises an exception if the shape is not valid
-        aocxchange.checks.check_shape(shape)
+        check_shape(shape)
 
         shp_label = self.shape_tool.AddShape(shape)
 
         if color is None:
             self.colors.SetColor(shp_label,
                                  self.current_color,
-                                 OCC.XCAFDoc.XCAFDoc_ColorGen)
+                                 XCAFDoc_ColorGen)
         else:
-            if isinstance(color, OCC.Quantity.Quantity_Color):
+            if isinstance(color, Quantity_Color):
                 self.current_color = color
             else:
                 # assert len(color) == 3
@@ -280,7 +287,7 @@ class StepOcafExporter(object):
                 self.set_color(r, g, b)
             self.colors.SetColor(shp_label,
                                  self.current_color,
-                                 OCC.XCAFDoc.XCAFDoc_ColorGen)
+                                 XCAFDoc_ColorGen)
 
         if layer is None:
             self.layers.SetLayer(shp_label, self.current_layer)
@@ -290,22 +297,21 @@ class StepOcafExporter(object):
 
     def write_file(self):
         r"""Write file"""
-        work_session = OCC.XSControl.XSControl_WorkSession()
-        writer = OCC.STEPCAFControl.STEPCAFControl_Writer(work_session.GetHandle(), False)
+        work_session = XSControl_WorkSession()
+        writer = STEPCAFControl_Writer(work_session.GetHandle(), False)
 
-        transfer_status = writer.Transfer(self.h_doc,
-                                          OCC.STEPControl.STEPControl_AsIs)
-        if transfer_status != OCC.IFSelect.IFSelect_RetDone:
+        transfer_status = writer.Transfer(self.h_doc, STEPControl_AsIs)
+        if transfer_status != IFSelect_RetDone:
             msg = "An error occurred while transferring a shape " \
                   "to the STEP writer"
             logger.error(msg)
-            raise aocxchange.exceptions.StepShapeTransferException(msg)
+            raise StepShapeTransferException(msg)
         logger.info('Writing STEP file')
 
         write_status = writer.Write(self.filename)
-        if write_status == OCC.IFSelect.IFSelect_RetDone:
+        if write_status == IFSelect_RetDone:
             logger.info("STEP file write successful.")
         else:
             msg = "An error occurred while writing the STEP file"
             logger.error(msg)
-            raise aocxchange.exceptions.StepFileWriteException(msg)
+            raise StepFileWriteException(msg)

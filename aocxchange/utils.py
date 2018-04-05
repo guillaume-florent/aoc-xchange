@@ -8,7 +8,7 @@ import logging
 
 import os
 
-import aocxchange.exceptions
+from aocxchange.exceptions import FileNotFoundException
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ def path_from_file(file_origin, relative_path):
     if not os.path.isfile(file_origin):
         msg = "File %s not found." % file_origin
         logger.error(msg)
-        raise aocxchange.exceptions.FileNotFoundException(msg)
+        raise FileNotFoundException(msg)
 
     dir_of_file_origin = os.path.dirname(os.path.realpath(file_origin))
     return os.path.abspath(os.path.join(dir_of_file_origin, relative_path))

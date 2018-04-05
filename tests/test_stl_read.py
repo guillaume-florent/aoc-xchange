@@ -4,6 +4,7 @@
 r"""STL file reading tests"""
 
 import pytest
+
 from OCC.TopoDS import TopoDS_Shape
 # import OCC.BRepPrimAPI
 

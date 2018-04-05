@@ -12,8 +12,8 @@ Deals with .dat files, mostly used to define 2D foil sections
 import logging
 import re
 
-import aocxchange.checks
-import aocxchange.extensions
+from aocxchange.checks import check_importer_filename
+from aocxchange.extensions import dat_extensions
 
 logger = logging.getLogger(__name__)
 
@@ -26,14 +26,15 @@ class DatImporter(object):
     filename : str
         Absolute filepath
     as_3d : bool
-        If True, each point has 3 elements (x, y, z=0.), if False, each point has 2 elements (x, y)
+        If True, each point has 3 elements (x, y, z=0.),
+        if False, each point has 2 elements (x, y)
     skip_first_line : bool
         If True, the first line of the .dat file is skipped
 
     """
     def __init__(self, filename, as_3d=False, skip_first_line=False):
 
-        aocxchange.checks.check_importer_filename(filename, aocxchange.extensions.dat_extensions)
+        check_importer_filename(filename, dat_extensions)
         self._filename = filename
         self._as_3d = as_3d
         self._skip_first_line = skip_first_line
@@ -59,7 +60,8 @@ class DatImporter(object):
             if len(data) == 2:  # two coordinates for each point
 
                 if float(data[0]) > 1. or float(data[0]) < 0.:
-                    logger.warn("Point %f %f in dat file has a x outside of 0->1" % (float(data[0]), float(data[1])))
+                    logger.warning("Point %f %f in dat file has a x outside "
+                                   "of 0->1" % (float(data[0]), float(data[1])))
 
                 if self._as_3d:
                     points.append((float(data[0]), float(data[1]), 0.0))

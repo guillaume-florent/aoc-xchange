@@ -4,61 +4,60 @@
 r"""STEP file reading tests"""
 
 import pytest
-import OCC.TopoDS
-import OCC.BRepPrimAPI
-import OCC.TopAbs
 
-import aocutils.topology
-import aocutils.pretty_print
+from OCC.TopoDS import TopoDS_Shape, TopoDS_Compound
+# import OCC.BRepPrimAPI
+from OCC.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
 
-import aocxchange.exceptions
-import aocxchange.step
-import aocxchange.utils
+from aocutils.topology import Topo
+# import aocutils.pretty_print
+
+from aocxchange.exceptions import FileNotFoundException, \
+    IncompatibleFileFormatException, StepFileReadException
+from aocxchange.step import StepImporter
+from aocxchange.utils import path_from_file
 
 
 def test_step_importer_wrong_path():
     r"""Wrong filename"""
-    with pytest.raises(aocxchange.exceptions.FileNotFoundException):
-        aocxchange.step.StepImporter("C:/stupid-filename.bad_extension")
+    with pytest.raises(FileNotFoundException):
+        StepImporter("C:/stupid-filename.bad_extension")
 
 
 def test_step_importer_wrong_extension():
     r"""wrong file format (i.e. trying to read a iges file
     with step importer)"""
-    with pytest.raises(aocxchange.exceptions.IncompatibleFileFormatException):
-        filename = aocxchange.utils.path_from_file(__file__,
-                                                   "./models_in/aube_pleine.iges")
-        aocxchange.step.StepImporter(filename)
+    with pytest.raises(IncompatibleFileFormatException):
+        filename = path_from_file(__file__, "./models_in/aube_pleine.iges")
+        StepImporter(filename)
 
 
 def test_step_importer_wrong_file_content():
     r"""wrong file content"""
-    with pytest.raises(aocxchange.exceptions.StepFileReadException):
-        aocxchange.step.StepImporter(aocxchange.utils.path_from_file(__file__,
-                                                                     "./models_in/empty.stp"))
+    with pytest.raises(StepFileReadException):
+        StepImporter(path_from_file(__file__, "./models_in/empty.stp"))
 
 
 def test_step_importer_happy_path():
     r"""happy path"""
-    importer = aocxchange.step.StepImporter(aocxchange.utils.path_from_file(__file__,
-                                                                            "./models_in/aube_pleine.stp"))
-    assert isinstance(importer.compound, OCC.TopoDS.TopoDS_Compound)
+    importer = StepImporter(path_from_file(__file__,
+                                           "./models_in/aube_pleine.stp"))
+    assert isinstance(importer.compound, TopoDS_Compound)
     assert isinstance(importer.shapes, list)
     for shape in importer.shapes:
-        assert isinstance(shape, OCC.TopoDS.TopoDS_Shape)
+        assert isinstance(shape, TopoDS_Shape)
     assert len(importer.shapes) == 1
 
 
 def test_step_importer_happy_topology():
     r"""import step file containing a box and test topology"""
-    importer = aocxchange.step.StepImporter(aocxchange.utils.path_from_file(__file__,
-                                                                            "./models_in/box_203.stp"))
+    importer = StepImporter(path_from_file(__file__, "./models_in/box_203.stp"))
     assert len(importer.shapes) == 1
 
-    assert isinstance(importer.shapes[0], OCC.TopoDS.TopoDS_Shape)
-    assert importer.shapes[0].ShapeType() == OCC.TopAbs.TopAbs_SOLID
+    assert isinstance(importer.shapes[0], TopoDS_Shape)
+    assert importer.shapes[0].ShapeType() == TopAbs_SOLID
 
-    topo = aocutils.topology.Topo(importer.shapes[0])
+    topo = Topo(importer.shapes[0])
     assert topo.number_of_compounds == 0
     assert topo.number_of_comp_solids == 0
     assert topo.number_of_solids == 1
@@ -67,12 +66,12 @@ def test_step_importer_happy_topology():
 
 def test_step_importer_2_boxes():
     r"""Import an step file containing 2 distinct boxes and test topology"""
-    importer = aocxchange.step.StepImporter(aocxchange.utils.path_from_file(__file__,
-                                                                            "./models_in/2_boxes_203.stp"))
+    importer = StepImporter(path_from_file(__file__,
+                                           "./models_in/2_boxes_203.stp"))
     assert len(importer.shapes) == 1
-    assert importer.shapes[0].ShapeType() == OCC.TopAbs.TopAbs_COMPOUND
+    assert importer.shapes[0].ShapeType() == TopAbs_COMPOUND
 
-    topo = aocutils.topology.Topo(importer.shapes[0])
+    topo = Topo(importer.shapes[0])
     assert topo.number_of_compounds == 1
     assert topo.number_of_comp_solids == 0
     assert topo.number_of_solids == 2

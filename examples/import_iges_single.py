@@ -7,23 +7,23 @@ from __future__ import print_function
 
 import logging
 
-import OCC.Display.SimpleGui
+from OCC.Display.SimpleGui import init_display
 
-import aocutils.display.topology
-import aocutils.display.defaults
+from aocutils.display.topology import faces
+from aocutils.display.defaults import backend
 
-import aocxchange.iges
-import aocxchange.utils
+from aocxchange.iges import IgesImporter
+from aocxchange.utils import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
+                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
+                           '%(lineno)3d :: %(message)s')
 
-backend = aocutils.display.defaults.backend
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
+backend = backend
+display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
-# my_iges_importer = occaddons.dataexchange.iges.IgesImporter("../../data/IGES/splines.igs")
-filename = aocxchange.utils.path_from_file(__file__, "./models_in/iges/aube_pleine.iges")
-iges_importer = aocxchange.iges.IgesImporter(filename)
+filename = path_from_file(__file__, "./models_in/iges/aube_pleine.iges")
+iges_importer = IgesImporter(filename)
 
 print(iges_importer.nb_shapes)  # 13
 print(len(iges_importer.shapes))  # 13
@@ -33,7 +33,7 @@ the_compound = iges_importer.compound
 # display.DisplayShape(the_compound)
 
 # there are no shells or solids in the compound (IGES specific)
-aocutils.display.topology.faces(display, iges_importer.compound)
+faces(display, iges_importer.compound)
 
 
 display.FitAll()

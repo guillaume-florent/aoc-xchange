@@ -7,22 +7,23 @@ from __future__ import print_function
 
 import logging
 
-import OCC.Display.SimpleGui
+from OCC.Display.SimpleGui import init_display
 
-import aocutils.display.topology
-import aocutils.display.backends
+from aocutils.display.topology import solids, edges
+from aocutils.display.defaults import backend
 
-import aocxchange.step
-import aocxchange.utils
+from aocxchange.step import StepImporter
+from aocxchange.utils import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
+                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
+                           '%(lineno)3d :: %(message)s')
 
-backend = aocutils.display.defaults.backend
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
+backend = backend
+display, start_display, add_menu, add_function_to_menu = init_display(backend)
 
-filename = aocxchange.utils.path_from_file(__file__, "./models_in/step/aube_pleine.stp")
-step_importer = aocxchange.step.StepImporter(filename)
+filename = path_from_file(__file__, "./models_in/step/aube_pleine.stp")
+step_importer = StepImporter(filename)
 
 # step_importer.read_file() -> automatic read_file !!
 
@@ -31,8 +32,8 @@ for shape in step_importer.shapes:
     print(shape.ShapeType())  # 2 -> solid
 # print("number_of_shapes: %i" % step_importer.number_of_shapes)  # 0 ??
 # display.DisplayShape(step_importer.shapes)
-aocutils.display.topology.solids(display, step_importer.shapes[0], transparency=0.8)
-aocutils.display.topology.edges(display, step_importer.shapes[0])
+solids(display, step_importer.shapes[0], transparency=0.8)
+edges(display, step_importer.shapes[0])
 display.FitAll()
 display.View_Iso()
 start_display()

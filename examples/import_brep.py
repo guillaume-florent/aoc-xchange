@@ -5,31 +5,32 @@ r"""Importing BREP"""
 
 import logging
 
-import OCC.Display.SimpleGui
+from OCC.Display.SimpleGui import init_display
 
-import aocutils.display.topology
-import aocutils.display.defaults
+from aocutils.display.topology import solids
+from aocutils.display.defaults import backend
 
-import aocxchange.brep
-import aocxchange.utils
+from aocxchange.brep import BrepImporter
+from aocxchange.utils import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: %(lineno)3d :: %(message)s')
+                    format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
+                           '%(lineno)3d :: %(message)s')
 
 # open/parse BREP file and get the resulting TopoDS_Shape instance
-filename = aocxchange.utils.path_from_file(__file__, "./models_in/brep/carter.brep")
-my_brep_importer = aocxchange.brep.BrepImporter(filename)
+filename = path_from_file(__file__, "./models_in/brep/carter.brep")
+my_brep_importer = BrepImporter(filename)
 the_shape = my_brep_importer.shape
 
 # Then display the shape
-backend = aocutils.display.defaults.backend
-display, start_display, add_menu, add_function_to_menu = OCC.Display.SimpleGui.init_display(backend)
+backend = backend
+display, start_display, add_menu, add_function_to_menu = init_display(backend)
 # display.DisplayShape(the_shape, color='BLUE', update=True)
 
 # 1 solid to display
-aocutils.display.topology.solids(display, the_shape)
+solids(display, the_shape)
 # faces
-# aocutils.display.topology.faces(display, the_shape, show_numbers=False)  # super slow !!
+# faces(display, the_shape, show_numbers=False)  # super slow !!
 display.FitAll()
 display.View_Iso()
 start_display()
