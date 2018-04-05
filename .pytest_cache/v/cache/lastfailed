@@ -1,0 +1,9 @@
+{
+  "tests/test_checks.py": true,
+  "tests/test_iges_read.py": true,
+  "tests/test_iges_write.py": true,
+  "tests/test_step_read.py": true,
+  "tests/test_step_write.py": true,
+  "tests/test_stl_read.py": true,
+  "tests/test_stl_write.py": true
+}

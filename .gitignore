@@ -62,3 +62,5 @@ target/
 /tests/models_out/box.stp
 /tests/models_out/box.StP
 /.pytest-cache
+/tests/models_out/box.sTl
+/tests/models_out/box.stl

@@ -9,6 +9,8 @@ import logging
 from OCC.StlAPI import StlAPI_Reader, StlAPI_Writer
 from OCC.TopoDS import TopoDS_Shape
 
+from aocutils.mesh import mesh
+
 # import aocxchange.exceptions
 from aocxchange.extensions import stl_extensions
 # import aocxchange.utils
@@ -73,30 +75,45 @@ class StlExporter(object):
         self._ascii_mode = ascii_mode
         self._filename = filename
 
-    def set_shape(self, a_shape):
+    def set_shape(self, a_shape, factor=4000., use_min_dim=False):
         """
         only a single shape can be exported...
 
         Parameters
         ----------
         a_shape
+        factor : float
+            Meshing factor, the higher the finer the mesh
+        use_min_dim: bool
+            Use the smallest dimension as a base for shape meshing
+            Useful for shapes with high aspect ratios
 
         """
         # raises an exception if the shape is not valid
         check_shape(a_shape)
-
+        mesh(shape=a_shape, factor=factor, use_min_dim=use_min_dim)
         self._shape = a_shape
 
     def write_file(self):
         r"""Write file"""
+        statuses = {0: "StlAPI_StatusOK",
+                    1: "StlAPI_MeshIsEmpty",
+                    2: "StlAPI_CannotOpenFile",
+                    3: "StlAPI_WriteError"}
         stl_writer = StlAPI_Writer()
 
         # Cross OCC versions STL writing
         try:
-            stl_writer.Write(self._shape, self._filename, self._ascii_mode)
+            status = stl_writer.Write(self._shape, self._filename, self._ascii_mode)
         except TypeError:
             stl_writer.SetASCIIMode(self._ascii_mode)
-            stl_writer.Write(self._shape, self._filename)
+            status = stl_writer.Write(self._shape, self._filename)
+
+        if status != 0:
+            msg = "STL write failed with code %i (%s)" % (status,
+                                                          statuses[status])
+            logger.error(msg)
+            raise RuntimeError(msg)
 
         # stl_writer.Write(self._shape, self._filename)
         logger.info("Wrote STL file")
