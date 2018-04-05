@@ -14,9 +14,9 @@ from __future__ import unicode_literals
 __name__ = "aocxchange"
 __description__ = "Read/write to/from CAD files"
 
-__version__ = "0.8.4"
+__version__ = "18.0.0"
 __author__ = "Guillaume Florent"
-__author_email__ = "florentsailing@gmail.com"
+__author_email__ = "guillaume.florent@tutanota.com"
 __license__ = 'GPL v3'
 __url__ = "https://github.com/guillaume-florent/aoc-xchange"
 __download_url__ = "https://github.com/guillaume-florent/aoc-xchange/releases/tag/" + __version__
