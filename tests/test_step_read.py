@@ -5,12 +5,10 @@ r"""STEP file reading tests"""
 
 import pytest
 
-from OCC.TopoDS import TopoDS_Shape, TopoDS_Compound
-# import OCC.BRepPrimAPI
-from OCC.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
+from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
+from OCC.Core.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
 
 from aocutils.topology import Topo
-# import aocutils.pretty_print
 
 from aocxchange.exceptions import FileNotFoundException, \
     IncompatibleFileFormatException, StepFileReadException

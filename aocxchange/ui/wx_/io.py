@@ -4,12 +4,14 @@
 r"""CAD file opening and saving in a wx ui"""
 
 import wx
-import aocxchange.extensions
-import aocxchange.utils
-import aocxchange.step
-import aocxchange.iges
-import aocxchange.stl
-import aocxchange.brep
+
+from aocxchange.extensions import step_extensions, stl_extensions, \
+    iges_extensions, brep_extensions, cad_files_wildcard
+from aocxchange.utils import extract_file_extension
+from aocxchange.step import StepImporter, StepExporter
+from aocxchange.iges import IgesImporter, IgesExporter
+from aocxchange.stl import StlImporter, StlExporter
+from aocxchange.brep import BrepImporter, BrepExporter
 
 
 class OpenCadDialog(wx.FileDialog):
@@ -18,10 +20,16 @@ class OpenCadDialog(wx.FileDialog):
     The dialog is implemented as a context manager
 
     """
-    def __init__(self, parent=None, title="Choose Cad file to open", default_dir="", default_file=""):
-        super(OpenCadDialog, self).__init__(parent, title, default_dir, default_file,
+    def __init__(self, parent=None,
+                 title="Choose Cad file to open",
+                 default_dir="",
+                 default_file=""):
+        super(OpenCadDialog, self).__init__(parent,
+                                            title,
+                                            default_dir,
+                                            default_file,
                                             style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST,
-                                            wildcard=aocxchange.extensions.cad_files_wildcard)
+                                            wildcard=cad_files_wildcard)
 
     def __enter__(self):
         return self
@@ -36,10 +44,17 @@ class SaveAsCadDialog(wx.FileDialog):
     The dialog is implemented as a context manager
 
     """
-    def __init__(self, parent=None, title="Save CAD file", default_dir="", default_file=""):
-        super(SaveAsCadDialog, self).__init__(parent, title, default_dir, default_file,
+    def __init__(self,
+                 parent=None,
+                 title="Save CAD file",
+                 default_dir="",
+                 default_file=""):
+        super(SaveAsCadDialog, self).__init__(parent,
+                                              title,
+                                              default_dir,
+                                              default_file,
                                               style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT,
-                                              wildcard=aocxchange.extensions.cad_files_wildcard)
+                                              wildcard=cad_files_wildcard)
 
     def __enter__(self):
         return self
@@ -62,11 +77,17 @@ class ComboBoxDialog(wx.Dialog):
     def __init__(self, parent, title, message, choices):
         super(ComboBoxDialog, self).__init__(parent, wx.ID_ANY, title)
 
-        self.selection = wx.ComboBox(self, choices=choices, value=choices[0], style=wx.CB_READONLY)
+        self.selection = wx.ComboBox(self,
+                                     choices=choices,
+                                     value=choices[0],
+                                     style=wx.CB_READONLY)
         ok_button = wx.Button(self, wx.ID_OK)
         main_sizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(wx.StaticText(self, wx.ID_ANY, message), 0, wx.TOP | wx.CENTER, 5)
+        sizer.Add(wx.StaticText(self, wx.ID_ANY, message),
+                  0,
+                  wx.TOP | wx.CENTER,
+                  5)
         sizer.Add(self.selection, 0, wx.ALL | wx.CENTER, 5)
         sizer.Add(ok_button, 0, wx.ALL | wx.CENTER, 30)
         main_sizer.AddSizer(sizer, 0, wx.ALL | wx.CENTER, 50)
@@ -83,21 +104,27 @@ class ComboBoxDialog(wx.Dialog):
 class IgesFormatDialog(ComboBoxDialog):
     r"""Specialized ComboBoxDialog for IGES formats"""
     def __init__(self):
-        super(IgesFormatDialog, self).__init__(parent=None, title="IGES format", message="Choose IGES format",
+        super(IgesFormatDialog, self).__init__(parent=None,
+                                               title="IGES format",
+                                               message="Choose IGES format",
                                                choices=["5.1", "5.3"])
 
 
 class StepSchemaDialog(ComboBoxDialog):
     r"""Specialized ComboBoxDialog for STEP schemas"""
     def __init__(self):
-        super(StepSchemaDialog, self).__init__(parent=None, title="STEP schema", message="Choose STEP schema",
+        super(StepSchemaDialog, self).__init__(parent=None,
+                                               title="STEP schema",
+                                               message="Choose STEP schema",
                                                choices=["AP203", "AP214CD"])
 
 
 class StlFormatDialog(ComboBoxDialog):
     r"""Specialized ComboBoxDialog for STL formats"""
     def __init__(self):
-        super(StlFormatDialog, self).__init__(parent=None, title="STL format", message="Choose STL format",
+        super(StlFormatDialog, self).__init__(parent=None,
+                                              title="STL format",
+                                              message="Choose STL format",
                                               choices=["Binary", "ASCII"])
 
 
@@ -119,22 +146,22 @@ def handle_cad_file_open():
             # TypeError: in method 'XSControl_Reader_ReadFile',
             #                                  argument 2 of type 'char const *'
             path = str(open_cad_file_dialog.GetPath())
-            extension = aocxchange.utils.extract_file_extension(path)
+            extension = extract_file_extension(path)
 
-            if extension.lower() in aocxchange.extensions.step_extensions:
+            if extension.lower() in step_extensions:
                 type_ = "step"
-                shapes = aocxchange.step.StepImporter(path).shapes
-            elif extension.lower() in aocxchange.extensions.iges_extensions:
+                shapes = StepImporter(path).shapes
+            elif extension.lower() in iges_extensions:
                 type_ = "iges"
-                shapes = aocxchange.iges.IgesImporter(path).shapes
-            elif extension.lower() in aocxchange.extensions.stl_extensions:
+                shapes = IgesImporter(path).shapes
+            elif extension.lower() in stl_extensions:
                 type_ = "stl"
                 shapes = list()
-                shapes.append(aocxchange.stl.StlImporter(path).shape)
-            elif extension.lower() in aocxchange.extensions.brep_extensions:
+                shapes.append(StlImporter(path).shape)
+            elif extension.lower() in brep_extensions:
                 type_ = "brep"
                 shapes = list()
-                shapes.append(aocxchange.brep.BrepImporter(path).shape)
+                shapes.append(BrepImporter(path).shape)
             else:
                 raise ValueError("File extension indicates a file type that "
                                  "is not supported")
@@ -166,42 +193,39 @@ def handle_cad_file_save_as(shapes):
     with SaveAsCadDialog() as save_as_cad_dialog:
         if save_as_cad_dialog.ShowModal() == wx.ID_OK:
             path = str(save_as_cad_dialog.GetPath())
-            extension = aocxchange.utils.extract_file_extension(path)
+            extension = extract_file_extension(path)
 
-            if extension.lower() in aocxchange.extensions.step_extensions:
+            if extension.lower() in step_extensions:
                 type_ = "step"
                 with StepSchemaDialog() as step_schema_dialog:
                     if step_schema_dialog.ShowModal() == wx.ID_OK:
                         extra_info = schema = str(step_schema_dialog.selection.GetValue())
-                        exporter = aocxchange.step.StepExporter(path,
-                                                                schema=schema)
+                        exporter = StepExporter(path, schema=schema)
                         for shape in shapes:
                             exporter.add_shape(shape)
                         exporter.write_file()
-            elif extension.lower() in aocxchange.extensions.iges_extensions:
+            elif extension.lower() in iges_extensions:
                 type_ = "iges"
                 with IgesFormatDialog() as iges_format_dialog:
                     if iges_format_dialog.ShowModal() == wx.ID_OK:
                         extra_info = format_ = str(iges_format_dialog.selection.GetValue())
-                        exporter = aocxchange.iges.IgesExporter(path,
-                                                                format_=format_)
+                        exporter = IgesExporter(path, format_=format_)
                         for shape in shapes:
                             exporter.add_shape(shape)
                         exporter.write_file()
-            elif extension.lower() in aocxchange.extensions.stl_extensions:
+            elif extension.lower() in stl_extensions:
                 type_ = "stl"
                 with StlFormatDialog() as stl_format_dialog:
                     if stl_format_dialog.ShowModal() == wx.ID_OK:
                         extra_info = ascii_mode = True if stl_format_dialog.selection.GetValue() == "ASCII" else False
-                        exporter = aocxchange.stl.StlExporter(path,
-                                                              ascii_mode=ascii_mode)
+                        exporter = StlExporter(path, ascii_mode=ascii_mode)
                         # TODO : warning message if len(shapes) > 1
                         exporter.set_shape(shapes[0])
                         exporter.write_file()
-            elif extension.lower() in aocxchange.extensions.brep_extensions:
+            elif extension.lower() in brep_extensions:
                 type_ = "brep"
                 extra_info = None
-                exporter = aocxchange.brep.BrepExporter(path)
+                exporter = BrepExporter(path)
                 # TODO : warning message if len(shapes) > 1
                 exporter.set_shape(shapes[0])
                 exporter.write_file()

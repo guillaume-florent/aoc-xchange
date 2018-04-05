@@ -8,7 +8,7 @@ from __future__ import print_function
 import logging
 
 from OCC.Display.SimpleGui import init_display
-# from OCC.Quantity import Quantity_Color, Quantity_NOC_GRAY3
+# from OCC.Core.Quantity import Quantity_Color, Quantity_NOC_GRAY3
 
 from aocutils.display.topology import solids
 from aocutils.display.defaults import backend

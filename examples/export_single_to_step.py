@@ -5,7 +5,7 @@ r"""Exporting a single shape to STL"""
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.step import StepExporter
 from aocxchange.utils import path_from_file

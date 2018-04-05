@@ -6,14 +6,12 @@ from __future__ import print_function
 
 import logging
 
-from OCC.StlAPI import StlAPI_Reader, StlAPI_Writer
-from OCC.TopoDS import TopoDS_Shape
+from OCC.Core.StlAPI import StlAPI_Reader, StlAPI_Writer
+from OCC.Core.TopoDS import TopoDS_Shape
 
 from aocutils.mesh import mesh
 
-# import aocxchange.exceptions
 from aocxchange.extensions import stl_extensions
-# import aocxchange.utils
 from aocxchange.checks import check_importer_filename, check_exporter_filename,\
     check_overwrite, check_shape
 

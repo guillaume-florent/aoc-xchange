@@ -5,9 +5,9 @@ r"""checks.py module tests"""
 
 import pytest
 
-from OCC.TopoDS import TopoDS_Shape, TopoDS_Shell
-from OCC.gp import gp_Pnt
-from OCC.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
+from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Shell
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.BRepBuilderAPI import BRepBuilderAPI_MakeEdge
 
 from aocutils.topology import Topo
 

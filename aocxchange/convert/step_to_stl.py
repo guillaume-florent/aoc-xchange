@@ -13,7 +13,7 @@ from aocxchange.stl import StlExporter
 from aocutils.mesh import mesh
 from aocutils.operations.transform import scale_uniform
 
-from OCC.gp import gp_Pnt
+from OCC.Core.gp import gp_Pnt
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ r"""Exporting multiple shapes to STEP with colors and layers"""
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
 from OCC.Display.SimpleGui import init_display
 
 from aocutils.display.defaults import backend

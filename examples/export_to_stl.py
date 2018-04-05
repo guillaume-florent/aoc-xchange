@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.stl import StlExporter
 from aocxchange.utils import path_from_file

@@ -7,12 +7,12 @@ from __future__ import print_function
 import logging
 import warnings
 
-from OCC.BRep import BRep_Builder
-from OCC.IFSelect import IFSelect_ItemsByEntity, IFSelect_RetDone
-from OCC.Interface import Interface_Static_SetCVal
-from OCC.STEPControl import STEPControl_Reader, STEPControl_Writer, \
+from OCC.Core.BRep import BRep_Builder
+from OCC.Core.IFSelect import IFSelect_ItemsByEntity, IFSelect_RetDone
+from OCC.Core.Interface import Interface_Static_SetCVal
+from OCC.Core.STEPControl import STEPControl_Reader, STEPControl_Writer, \
     STEPControl_AsIs
-from OCC.TopoDS import TopoDS_Compound
+from OCC.Core.TopoDS import TopoDS_Compound
 
 from aocutils.types import topo_types_dict
 

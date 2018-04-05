@@ -5,7 +5,7 @@ r"""Exporting multiple shapes to IGES"""
 
 import logging
 
-import OCC.BRepPrimAPI
+import OCC.Core.BRepPrimAPI
 
 from aocxchange.iges import IgesExporter
 from aocxchange.utils import path_from_file

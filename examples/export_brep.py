@@ -5,7 +5,7 @@ r"""Exporting a single shape to BREP"""
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.brep import BrepExporter
 from aocxchange.utils import path_from_file

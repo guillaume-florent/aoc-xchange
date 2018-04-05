@@ -6,7 +6,7 @@ import os.path
 import logging
 import warnings
 
-from OCC.TopoDS import TopoDS_Shape
+from OCC.Core.TopoDS import TopoDS_Shape
 
 from aocxchange.exceptions import FileNotFoundException, \
     DirectoryNotFoundException, IncompatibleFileFormatException

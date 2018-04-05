@@ -7,9 +7,9 @@ import pytest
 import os.path
 import glob
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
-from OCC.gp import gp_Pnt
-from OCC.TopoDS import TopoDS_Solid
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox, BRepPrimAPI_MakeSphere
+from OCC.Core.gp import gp_Pnt
+from OCC.Core.TopoDS import TopoDS_Solid
 
 from aocutils.topology import Topo, shape_to_topology
 

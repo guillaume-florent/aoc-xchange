@@ -5,7 +5,7 @@ r"""Step.py use example"""
 
 import logging
 
-from OCC.BRepPrimAPI import BRepPrimAPI_MakeBox
+from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.step import StepImporter, StepExporter
 

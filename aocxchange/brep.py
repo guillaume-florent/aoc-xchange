@@ -6,10 +6,10 @@ from __future__ import print_function
 
 import logging
 
-from OCC.BRep import BRep_Builder
-from OCC.BRepTools import breptools_Write, breptools_Read
-from OCC.Message import Handle_Message_ProgressIndicator
-from OCC.TopoDS import TopoDS_Shape
+from OCC.Core.BRep import BRep_Builder
+from OCC.Core.BRepTools import breptools_Write, breptools_Read
+from OCC.Core.Message import Handle_Message_ProgressIndicator
+from OCC.Core.TopoDS import TopoDS_Shape
 
 # import aocxchange.exceptions
 from aocxchange.extensions import brep_extensions

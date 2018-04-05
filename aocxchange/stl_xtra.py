@@ -31,7 +31,8 @@ def nb_regions(stl_filepath):
                 items = line.split()
                 # assert len(items) == 2
                 if len(items) != 2:
-                    msg = "line expected to contain 2 items, found %i" % len(items)
+                    msg = "line expected to contain 2 items, " \
+                          "found %i" % len(items)
                     logger.error(msg)
                     raise AssertionError(msg)
                 # print(items[1])

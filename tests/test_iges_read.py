@@ -5,11 +5,9 @@ r"""IGES file reading tests"""
 
 import pytest
 
-from OCC.TopoDS import TopoDS_Shape, TopoDS_Compound
-# import OCC.BRepPrimAPI
+from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
 
 from aocutils.topology import Topo
-# import aocutils.pretty_print
 
 from aocxchange.exceptions import FileNotFoundException, \
     IncompatibleFileFormatException, IgesFileReadException

@@ -6,12 +6,11 @@ from __future__ import print_function
 
 import logging
 
-from OCC.BRep import BRep_Builder
-from OCC.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
-from OCC.IGESControl import IGESControl_Controller, IGESControl_Reader, \
+from OCC.Core.BRep import BRep_Builder
+from OCC.Core.IFSelect import IFSelect_RetDone, IFSelect_ItemsByEntity
+from OCC.Core.IGESControl import IGESControl_Controller, IGESControl_Reader, \
     IGESControl_Writer
-from OCC.TopoDS import TopoDS_Compound
-# import OCC.TopAbs
+from OCC.Core.TopoDS import TopoDS_Compound
 
 from aocxchange.exceptions import IgesFileReadException, \
     IgesFileWriteException, IgesUnknownFormatException
@@ -21,9 +20,6 @@ from aocxchange.checks import check_importer_filename, check_exporter_filename,\
 from aocxchange.extensions import iges_extensions
 
 from aocutils.types import topo_types_dict
-# import aocutils.brep.shell_make
-# import aocutils.brep.solid_make
-# import aocutils.topology
 
 logger = logging.getLogger(__name__)
 

@@ -6,22 +6,19 @@ from __future__ import print_function
 
 import logging
 
-# import OCC.BRep
-from OCC.IFSelect import IFSelect_RetDone
-# import OCC.Interface
-from OCC.Quantity import Quantity_Color, Quantity_NOC_RED
-from OCC.STEPCAFControl import STEPCAFControl_Reader, STEPCAFControl_Writer
-from OCC.STEPControl import STEPControl_AsIs
-from OCC.TCollection import TCollection_ExtendedString
-# import OCC.TColStd
-from OCC.TDF import TDF_LabelSequence
-from OCC.TDocStd import Handle_TDocStd_Document
-from OCC.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
+from OCC.Core.IFSelect import IFSelect_RetDone
+from OCC.Core.Quantity import Quantity_Color, Quantity_NOC_RED
+from OCC.Core.STEPCAFControl import STEPCAFControl_Reader, STEPCAFControl_Writer
+from OCC.Core.STEPControl import STEPControl_AsIs
+from OCC.Core.TCollection import TCollection_ExtendedString
+from OCC.Core.TDF import TDF_LabelSequence
+from OCC.Core.TDocStd import Handle_TDocStd_Document
+from OCC.Core.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
 # import OCC.TopoDS
-from OCC.XCAFApp import _XCAFApp
-from OCC.XCAFDoc import XCAFDoc_ColorSurf, XCAFDoc_ColorGen, \
+from OCC.Core.XCAFApp import _XCAFApp
+from OCC.Core.XCAFDoc import XCAFDoc_ColorSurf, XCAFDoc_ColorGen, \
     XCAFDoc_DocumentTool
-from OCC.XSControl import XSControl_WorkSession
+from OCC.Core.XSControl import XSControl_WorkSession
 
 from aocutils.topology import Topo
 
