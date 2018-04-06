@@ -38,15 +38,7 @@ Warning
 **aocxchange** can import IGES, STEP, BREP, and STL files. Beware that the import of a similar looking geometry from different file
 types might (and very likely will) lead to a different topology.
 
-For example, the import of 2 distinct solids (closed boxes) will lead to:
-
-- undistinguishable faces from an IGES file
-
-- 2 separate solids from a STEP file
-
-- 2 separate closed shells from a STL file
-
-If working with solids, prefer STEP; you might get away with STL but it will involve extra effort
+If working with solids, prefer STEP; you might get away with other formats but it will involve extra effort
 
 If working with surfaces, any file type will do. However, remember that STEP and IGES geometry is mathematically defined
 while STL basically stores a bunch of triangles approximating the geometry (which is absolutely fine and even
@@ -57,24 +49,13 @@ install
 
 .. code-block:: bash
 
-  pip install aocxchange
+  conda install -c gflorent aocxchange
 
 Dependencies
 ~~~~~~~~~~~~
 
 *aocxchange* depends on OCC >=0.16 and aocutils. The examples require wx>=2.8 (or another backend (minor code modifications required)).
-Please see the table below for instructions on how to satisfy the requirements.
-
-+----------+----------+----------------------------------------------------------------------------+
-| package  | version  | Comment                                                                    |
-+==========+==========+============================================================================+
-| OCC      | >=0.16.  | | See pythonocc.org or github.com.tpaviot/pythonocc-core for instructions  |
-|          |          | | or `conda install -c https://conda.anaconda.org/dlr-sc pythonocc-core`   |
-+----------+----------+----------------------------------------------------------------------------+
-| aocutils | latest   | `pip install aocutils --upgrade`                                           |
-+----------+----------+----------------------------------------------------------------------------+
-| wx       | >=2.8    | See wxpython.org for instructions                                          |
-+----------+----------+----------------------------------------------------------------------------+
+Please see how the Dockerfile satisfies these requirements.
 
 Goal
 ----
@@ -84,30 +65,30 @@ The goal of the **aocxchange** package is to simplify the read/write of CAD file
 Versions
 --------
 
-occdataexchange version and target PythonOCC version
+aocxchange version and target PythonOCC version
 
 +--------------------+-------------------+
 | aocxchange version | PythonOCC version |
 +====================+===================+
-| 0.1.*              | 0.16.2            |
+| 18.*.*             | >=0.18.2          |
 +--------------------+-------------------+
 
 Examples
 --------
 
-The examples are in the *examples* folder at the Github repository (https://github.com/floatingpointstack/aoc-xchange).
+The examples are in the *examples* folder at the Github repository (https://github.com/guillaume-florent/aoc-xchange).
 
 The wx backend (wxPython) backend is used for the examples that display a UI.
 You may easily change this behaviour to use pyqt4 or PySide by changing the backend in the call to init_display().
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-xchange/master/img/submarine.jpg
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-xchange/master/img/submarine.jpg
    :alt: submarine from STL
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-xchange/master/img/step_import_wing_structure_solids.jpg
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-xchange/master/img/step_import_wing_structure_solids.jpg
    :alt: wing structure solids from STEP
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-xchange/master/img/vor70_cockpit.jpg
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-xchange/master/img/vor70_cockpit.jpg
    :alt: VOR 70 cockpit from STEP
 
-.. image:: https://raw.githubusercontent.com/floatingpointstack/aoc-xchange/master/img/step_import_aube_solids_and_edges.jpg
+.. image:: https://raw.githubusercontent.com/guillaume-florent/aoc-xchange/master/img/step_import_aube_solids_and_edges.jpg
    :alt: Aube solids and edges from STEP
