@@ -10,6 +10,18 @@ aoc-xchange
 .. image:: https://api.codacy.com/project/badge/Grade/10428d668bc94d10a96a39a200dfd843
     :target: https://www.codacy.com/app/guillaume-florent/aoc-xchange?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=guillaume-florent/aoc-xchange&amp;utm_campaign=Badge_Grade
 
+.. image:: https://anaconda.org/gflorent/aocxchange/badges/version.svg
+    :target: https://anaconda.org/gflorent/aocxchange
+
+.. image:: https://anaconda.org/gflorent/aocxchange/badges/latest_release_date.svg
+    :target: https://anaconda.org/gflorent/aocxchange
+
+.. image:: https://anaconda.org/gflorent/aocxchange/badges/platforms.svg
+    :target: https://anaconda.org/gflorent/aocxchange
+
+.. image:: https://anaconda.org/gflorent/aocxchange/badges/downloads.svg
+    :target: https://anaconda.org/gflorent/aocxchange
+
 .. image:: http://img.shields.io/badge/Python-2.7_3.*-ff3366.svg
     :target: https://www.python.org/downloads/
 
