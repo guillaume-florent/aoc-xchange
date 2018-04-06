@@ -41,7 +41,8 @@ setup(
               'aocxchange.convert',
               'aocxchange.pymesh',
               'aocxchange.ui'],
-    install_requires=['OCC', 'numpy', 'scipy', 'corelib', 'wx', 'aocutils'],
+    # install_requires=['OCC', 'numpy', 'scipy', 'corelib', 'wx', 'aocutils'],
+    install_requires=[],
     extras_require={
         'dev': [],
         'test': ['pytest', 'coverage'],
