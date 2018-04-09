@@ -1,5 +1,7 @@
 For the exporter, if the destination directory does not exist, it should be an option (parameter) to create it or not
 
+Document new functions stl_xtra, pymesh ...
+
 conversions
 -----------
 
