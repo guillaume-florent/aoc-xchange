@@ -1,5 +1,0 @@
-# OCC
-aocutils
-numpy
-
-pytest
