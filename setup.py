@@ -40,7 +40,8 @@ setup(
     packages=['aocxchange',
               'aocxchange.convert',
               'aocxchange.pymesh',
-              'aocxchange.ui'],
+              'aocxchange.ui',
+              'aocxchange.ui.wx_'],
     # install_requires=['OCC', 'numpy', 'scipy', 'corelib', 'wx', 'aocutils'],
     install_requires=[],
     extras_require={
@@ -48,7 +49,13 @@ setup(
         'test': ['pytest', 'coverage'],
     },
     package_data={},
-    data_files=[],
+    data_files=[('aocxchange/ui/icons',
+                 ['aocxchange/ui/icons/dialog-cancel.png',
+                  'aocxchange/ui/icons/dialog-ok-apply.png',
+                  'aocxchange/ui/icons/export.png',
+                  'aocxchange/ui/icons/open.png',
+                  'aocxchange/ui/icons/save.png',
+                  'aocxchange/ui/icons/save-as.png'])],
     entry_points={},
     scripts=['bin/step_to_stl', 'bin/step_to_obj']
     )
