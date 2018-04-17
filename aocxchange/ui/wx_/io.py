@@ -90,7 +90,9 @@ class ComboBoxDialog(wx.Dialog):
                   5)
         sizer.Add(self.selection, 0, wx.ALL | wx.CENTER, 5)
         sizer.Add(ok_button, 0, wx.ALL | wx.CENTER, 30)
-        main_sizer.AddSizer(sizer, 0, wx.ALL | wx.CENTER, 50)
+        # main_sizer.AddSizer(sizer, 0, wx.ALL | wx.CENTER, 50)
+        # wxpython >= 4 ->
+        main_sizer.Add(sizer, 0, wx.ALL | wx.CENTER, 50)
         self.SetSizer(main_sizer)
         self.Fit()
 

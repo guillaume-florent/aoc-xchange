@@ -1,6 +1,6 @@
 package:
   name: aocxchange
-  version: "18.0.3"
+  version: "18.0.4"
 
 source:
   path: ../aoc-xchange
@@ -8,7 +8,7 @@ source:
 build:
   number: 0
   noarch: python
-  script: python setup.py install --single-version-externally-managed --record record.txt
+  script: python setup.py install
   include_recipe: True
 
 requirements:
