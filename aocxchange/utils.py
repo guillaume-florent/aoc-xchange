@@ -5,10 +5,10 @@ r"""utils module of aocxchange"""
 from __future__ import print_function
 
 import logging
-
+import warnings
 import os
 
-from aocxchange.exceptions import FileNotFoundException
+import corelib.core.files
 
 logger = logging.getLogger(__name__)
 
@@ -31,14 +31,19 @@ def path_from_file(file_origin, relative_path):
         Absolute file path
 
     """
-    # Check file_origin exists
-    if not os.path.isfile(file_origin):
-        msg = "File %s not found." % file_origin
-        logger.error(msg)
-        raise FileNotFoundException(msg)
+    # # Check file_origin exists
+    # if not os.path.isfile(file_origin):
+    #     msg = "File %s not found." % file_origin
+    #     logger.error(msg)
+    #     raise FileNotFoundError(msg)
+    #
+    # dir_of_file_origin = os.path.dirname(os.path.realpath(file_origin))
+    # return os.path.abspath(os.path.join(dir_of_file_origin, relative_path))
 
-    dir_of_file_origin = os.path.dirname(os.path.realpath(file_origin))
-    return os.path.abspath(os.path.join(dir_of_file_origin, relative_path))
+    warnings.warn("aocxchange.utils.path_from_file is deprecated, "
+                  "use corelib.core.files.path_from_file or "
+                  "corelib.core.files.p_ instead")
+    return corelib.core.files.path_from_file(file_origin, relative_path)
 
 
 def extract_file_extension(filename):

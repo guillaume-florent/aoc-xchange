@@ -13,14 +13,14 @@ from aocutils.topology import Topo
 
 from aocxchange.checks import check_importer_filename, check_exporter_filename,\
     check_overwrite, check_shape
-from aocxchange.exceptions import FileNotFoundException, \
-    DirectoryNotFoundException, IncompatibleFileFormatException
+from aocxchange.exceptions import DirectoryNotFoundException, \
+    IncompatibleFileFormatException
 from aocxchange.utils import path_from_file
 
 
 def test_check_importer_filename_inexistent_file():
     r"""Inexistent file test for check_importer_filename()"""
-    with pytest.raises(FileNotFoundException):
+    with pytest.raises(FileNotFoundError):
         check_importer_filename(path_from_file(__file__,
                                                "./models_out/dummy.igs"))
 

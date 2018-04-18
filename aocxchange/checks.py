@@ -8,9 +8,15 @@ import warnings
 
 from OCC.Core.TopoDS import TopoDS_Shape
 
-from aocxchange.exceptions import FileNotFoundException, \
-    DirectoryNotFoundException, IncompatibleFileFormatException
+from aocxchange.exceptions import DirectoryNotFoundException, \
+    IncompatibleFileFormatException
 from aocxchange.utils import extract_file_extension
+
+# Python 2 and 3 compatibility
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +38,7 @@ def check_importer_filename(filename, allowed_extensions="*"):
 
     Raises
     ------
-    aocxchange.exceptions.FileNotFoundException
+    FileNotFoundError
         if the file does not exist
     aocxchange.exceptions.IncompatibleFileFormatException
         if the extension is not in allowed extensions
@@ -42,7 +48,7 @@ def check_importer_filename(filename, allowed_extensions="*"):
     if not os.path.isfile(filename):
         msg = "Importer error : file %s not found." % filename
         logger.error(msg)
-        raise FileNotFoundException(msg)
+        raise FileNotFoundError(msg)
     else:
         logger.debug("File to import exists")
 

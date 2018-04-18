@@ -10,15 +10,15 @@ from OCC.Core.TopAbs import TopAbs_SOLID, TopAbs_COMPOUND
 
 from aocutils.topology import Topo
 
-from aocxchange.exceptions import FileNotFoundException, \
-    IncompatibleFileFormatException, StepFileReadException
+from aocxchange.exceptions import IncompatibleFileFormatException,\
+    StepFileReadException
 from aocxchange.step import StepImporter
 from aocxchange.utils import path_from_file
 
 
 def test_step_importer_wrong_path():
     r"""Wrong filename"""
-    with pytest.raises(FileNotFoundException):
+    with pytest.raises(FileNotFoundError):
         StepImporter("C:/stupid-filename.bad_extension")
 
 

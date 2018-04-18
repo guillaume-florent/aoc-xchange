@@ -9,15 +9,15 @@ from OCC.Core.TopoDS import TopoDS_Shape, TopoDS_Compound
 
 from aocutils.topology import Topo
 
-from aocxchange.exceptions import FileNotFoundException, \
-    IncompatibleFileFormatException, IgesFileReadException
+from aocxchange.exceptions import IncompatibleFileFormatException, \
+    IgesFileReadException
 from aocxchange.iges import IgesImporter
 from aocxchange.utils import path_from_file
 
 
 def test_iges_importer_wrong_path():
     r"""Wrong filename"""
-    with pytest.raises(FileNotFoundException):
+    with pytest.raises(FileNotFoundError):
         IgesImporter("C:/stupid-filename.bad_extension")
 
 

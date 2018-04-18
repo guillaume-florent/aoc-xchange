@@ -8,12 +8,16 @@ import platform
 
 
 from aocxchange.utils import path_from_file, extract_file_extension
-from aocxchange.exceptions import FileNotFoundException
 
 
 def test_path_from_file_inexistent_file():
-    r"""Test that trying to build the path from an inexistent file fails"""
-    with pytest.raises(FileNotFoundException):
+    r"""Test that trying to build the path from an inexistent file fails
+
+    The exception if a value error because the first parameter refers to a file
+    that does not exist
+
+    """
+    with pytest.raises(ValueError):
         path_from_file("C:/file-does-not-exist.txt", "./test/test.txt")
 
 

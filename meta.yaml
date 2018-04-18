@@ -1,6 +1,6 @@
 package:
   name: aocxchange
-  version: "18.0.4"
+  version: "18.0.5"
 
 source:
   path: ../aoc-xchange
@@ -25,14 +25,6 @@ requirements:
     # - OCC
     - wxpython
     - pyqt
-
-#test:
-#  requires:
-#    - pytest
-#  source_files:
-#    - tests
-#  commands:
-#    - pytest tests/
 
 about:
   home: https://github.com/guillaume-florent/aoc-xchange

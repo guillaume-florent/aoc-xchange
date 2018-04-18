@@ -9,15 +9,14 @@ from OCC.Core.TopoDS import TopoDS_Shape
 
 from aocutils.topology import Topo
 
-from aocxchange.exceptions import FileNotFoundException, \
-    IncompatibleFileFormatException
+from aocxchange.exceptions import IncompatibleFileFormatException
 from aocxchange.stl import StlImporter
 from aocxchange.utils import path_from_file
 
 
 def test_iges_importer_wrong_path():
     r"""Wrong filename"""
-    with pytest.raises(FileNotFoundException):
+    with pytest.raises(FileNotFoundError):
         StlImporter("C:/stupid-filename.bad_extension")
 
 

@@ -19,10 +19,10 @@ class BRepBuildingException(AocXChangeException):
 
 # IO Specific / All file types generic
 
-
-class FileNotFoundException(AocXChangeException):
-    r"""The file could not be found"""
-    pass
+# Use teh builtin FileNotFoundError instead
+# class FileNotFoundException(AocXChangeException):
+#     r"""The file could not be found"""
+#     pass
 
 
 class DirectoryNotFoundException(AocXChangeException):
