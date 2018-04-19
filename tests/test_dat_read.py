@@ -3,7 +3,7 @@
 
 r"""DAT file reading tests"""
 
-from aocxchange.utils import path_from_file
+from corelib.core.files import path_from_file
 from aocxchange.dat import DatImporter, import_dat_file
 
 

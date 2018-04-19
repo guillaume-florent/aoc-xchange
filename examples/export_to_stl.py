@@ -10,7 +10,7 @@ import logging
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.stl import StlExporter
-from aocxchange.utils import path_from_file
+from corelib.core.files import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '

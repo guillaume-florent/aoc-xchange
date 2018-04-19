@@ -60,13 +60,13 @@ class Stl(BaseMesh):
 
         else:
             # Create data from file
-            if py3() is True:
-                if is_binary(filename):
-                    mode = "rb"
-                else:
-                    mode = "r"
-            else:
+            # if py3() is True:
+            if is_binary(filename):
                 mode = "rb"
+            else:
+                mode = "r"
+            # else:
+            #     mode = "rb"
             with open(filename, mode) as fh:
                 name, data, mode = Stl.__load(fh, mode=mode_policy)
             self.name = name

@@ -9,7 +9,12 @@ from os.path import join, isfile, abspath, splitext
 from argparse import ArgumentParser
 from aocxchange.convert.step_to_stl import step_to_stl, ONE_SHAPE_PER_FILE, \
     ALL_SHAPES_IN_ONE_FILE
-from aocxchange.exceptions import FileNotFoundException
+
+# Python 2 and 3 compatibility
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
 
 logger = logging.getLogger(__name__)
 
@@ -58,5 +63,5 @@ try:
                 use_min_dim=args.usemindim,
                 ascii_mode=not args.binary,
                 multi_shape_mode=mode)
-except FileNotFoundException:
+except FileNotFoundError:
     logger.error("STEP file does not exist")
