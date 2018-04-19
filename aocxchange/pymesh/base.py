@@ -334,7 +334,11 @@ class BaseMesh(object):
         print("endsolid {}".format(name), file=fh)
 
     # OBJ
-    def save_obj(self, filename, update_normals=True, write_normals=False):
+    def save_obj(self,
+                 filename,
+                 update_normals=True,
+                 write_normals=False,
+                 group=True):
         """Save data in OBJ format
         
         Parameters
@@ -343,6 +347,8 @@ class BaseMesh(object):
             The obj file name
         update_normals : bool
         write_normals : bool
+        group : bool
+            Add a g entry before the f entries
 
         """
         if update_normals:
@@ -388,6 +394,8 @@ class BaseMesh(object):
             if write_normals is True:
                 for vn in normals_list:
                     print("vn {} {} {}".format(vn[0], vn[1], vn[2]), file=fh)
+            if group is True:
+                print("g patch0", file=fh)
             for t in triangle_list:
                 faces = t[0]
                 normal = t[1]
