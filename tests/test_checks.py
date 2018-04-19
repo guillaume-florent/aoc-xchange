@@ -17,6 +17,12 @@ from aocxchange.exceptions import DirectoryNotFoundException, \
     IncompatibleFileFormatException
 from aocxchange.utils import path_from_file
 
+# Python 2 and 3 compatibility
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 
 def test_check_importer_filename_inexistent_file():
     r"""Inexistent file test for check_importer_filename()"""

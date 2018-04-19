@@ -13,8 +13,14 @@ from aocxchange.exceptions import IncompatibleFileFormatException
 from aocxchange.stl import StlImporter
 from aocxchange.utils import path_from_file
 
+# Python 2 and 3 compatibility
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
 
-def test_iges_importer_wrong_path():
+
+def test_stl_importer_wrong_path():
     r"""Wrong filename"""
     with pytest.raises(FileNotFoundError):
         StlImporter("C:/stupid-filename.bad_extension")

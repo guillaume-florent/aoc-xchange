@@ -14,6 +14,12 @@ from aocxchange.exceptions import IncompatibleFileFormatException, \
 from aocxchange.iges import IgesImporter
 from aocxchange.utils import path_from_file
 
+# Python 2 and 3 compatibility
+try:
+    FileNotFoundError
+except NameError:
+    FileNotFoundError = IOError
+
 
 def test_iges_importer_wrong_path():
     r"""Wrong filename"""
