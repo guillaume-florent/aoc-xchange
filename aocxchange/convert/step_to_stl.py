@@ -33,8 +33,10 @@ def step_to_stl(step_file_path,
 
     Parameters
     ----------
-    step_file_path
-    stl_file_path
+    step_file_path : str
+        Path to the input STEP file
+    stl_file_path : str
+        Path to the output STL file
     factor : float
         Meshing factor, optional (default is 4000.)
         The higher, the finer the mesh and the bigger the resulting file

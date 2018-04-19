@@ -7,10 +7,12 @@ services:
   - docker
 
 install:
-  - docker build --tag guillaume-florent/aocxchange:latest .
+  - docker build --file Dockerfile.py3 --tag guillaume-florent/aocxchange-py3:latest .
+  - docker build --file Dockerfile.py2 --tag guillaume-florent/aocxchange-py2:latest .
 
 script:
-  - docker run --name aocxchange guillaume-florent/aocxchange:latest /bin/bash -c "cd /opt/aoc-xchange;pytest tests/"
+  - docker run guillaume-florent/aocxchange-py3:latest /bin/bash -c "cd /opt/aoc-xchange;pytest tests/"
+  - docker run guillaume-florent/aocxchange-py2:latest /bin/bash -c "cd /opt/aoc-xchange;pytest tests/"
 
 after_script:
   - docker images

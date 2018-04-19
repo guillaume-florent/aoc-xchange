@@ -22,7 +22,7 @@ aoc-xchange
 .. image:: https://anaconda.org/gflorent/aocxchange/badges/downloads.svg
     :target: https://anaconda.org/gflorent/aocxchange
 
-.. image:: http://img.shields.io/badge/Python-2.7_3.*-ff3366.svg
+.. image:: http://img.shields.io/badge/Python3.*-ff3366.svg
     :target: https://www.python.org/downloads/
 
 The **aoc-xchange** project provides a Python package named **aocxchange** to read and write
