@@ -38,7 +38,8 @@ class Obj(BaseMesh):
 
         else:
             # Create data from file
-            with open(filename, "rb") as fh:
+            # with open(filename, "rb") as fh:
+            with open(filename, "r") as fh:
                 data = Obj.__load(fh)
             self.name = filename
             self.data = data
@@ -66,7 +67,8 @@ class Obj(BaseMesh):
 
                 elif line.lstrip().startswith("v"):
                     vertices = line.replace("\n", "").split(" ")[1:]
-                    vertices_list.append(map(float, vertices))
+                    # vertices_list.append(map(float, vertices))
+                    vertices_list.append([float(v) for v in vertices])
 
                 elif line.lstrip().startswith("f"):
                     t_index_list = []

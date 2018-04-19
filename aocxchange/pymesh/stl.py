@@ -8,6 +8,10 @@ import logging
 import numpy
 import os
 import struct
+
+from corelib.core.python_ import py3
+from corelib.core.files import is_binary
+
 from .base import BaseMesh
 
 
@@ -56,7 +60,14 @@ class Stl(BaseMesh):
 
         else:
             # Create data from file
-            with open(filename, "rb") as fh:
+            if py3() is True:
+                if is_binary(filename):
+                    mode = "rb"
+                else:
+                    mode = "r"
+            else:
+                mode = "rb"
+            with open(filename, mode) as fh:
                 name, data, mode = Stl.__load(fh, mode=mode_policy)
             self.name = name
             self.data = data
@@ -86,8 +97,7 @@ class Stl(BaseMesh):
         if not header.strip():
             return
 
-        if mode in (Stl.MODE_AUTO, Stl.MODE_ASCII) and \
-                header.startswith('solid'):
+        if fh.mode == "r":
             try:
                 name = header.split('\n', 1)[0][:5].strip()
                 data = Stl.__load_ascii(fh, header)
@@ -97,10 +107,25 @@ class Stl(BaseMesh):
                 msg = "Error in header splitting or ascii loading"
                 logger.warning(msg)
                 # pass
-
-        else:
+        elif fh.mode == "rb":
             data = Stl.__load_binary(fh)
             mode = Stl.MODE_BINARY
+
+        # if mode in (Stl.MODE_AUTO, Stl.MODE_ASCII) and \
+        #         header.startswith('solid'):
+        #     try:
+        #         name = header.split('\n', 1)[0][:5].strip()
+        #         data = Stl.__load_ascii(fh, header)
+        #         mode = Stl.MODE_ASCII
+        #     except:
+        #         # NO pass after except (GF 27 OCT 2017)
+        #         msg = "Error in header splitting or ascii loading"
+        #         logger.warning(msg)
+        #         # pass
+        #
+        # else:
+        #     data = Stl.__load_binary(fh)
+        #     mode = Stl.MODE_BINARY
 
         return name, data, mode
 

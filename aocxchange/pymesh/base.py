@@ -377,11 +377,12 @@ class BaseMesh(object):
             # print(normals_list)
             triangle_list.append((one_triangle, n_index + 1))
 
-        with open(filename, "wb") as fh:
+        # with open(filename, "wb") as fh:
+        with open(filename, "w") as fh:
             print("# {} {}".format(__name__, __version__), file=fh)
             print("# {}".format(datetime.datetime.now()), file=fh)
             print("# {}".format(__url__), file=fh)
-            print("", file=fh)
+            # print("", file=fh)
             for v in vectors_list:
                 print("v {} {} {}".format(v[0], v[1], v[2]), file=fh)
             if write_normals is True:
