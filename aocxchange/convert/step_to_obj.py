@@ -70,6 +70,7 @@ def step_to_obj(step_file_path,
         # Save as OBJ
         mesh.save_obj(obj_file_path,
                       update_normals=True,
+                      group=group,
                       write_normals=write_normals)
 
     # Delete STL
