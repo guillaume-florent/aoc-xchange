@@ -15,16 +15,9 @@ RUN apt-get update && apt-get install -y libgl1-mesa-dev libx11-xcb1 && rm -rf /
 
 # aocxchange
 WORKDIR /opt
-ADD https://api.github.com/repos/guillaume-florent/aoc-xchange/git/refs/heads/master version.json
+# ADD https://api.github.com/repos/guillaume-florent/aoc-xchange/git/refs/heads/master version.json
 RUN git clone --depth=1 https://github.com/guillaume-florent/aoc-xchange
 WORKDIR /opt/aoc-xchange
 RUN python setup.py install
 
-# Get the executables operational
-RUN cp /opt/aoc-xchange/bin/step_to_obj /usr/local/bin && \
-    cp /opt/aoc-xchange/bin/step_to_stl /usr/local/bin && \
-    chmod +x /usr/local/bin/step_to_stl && \
-    chmod +x /usr/local/bin/step_to_obj
-
-# Sometimes useful ...
-RUN apt-get update && apt-get install -y gedit && rm -rf /var/lib/apt/lists/*
+# setup.py should deal with the installation of command line utilities
