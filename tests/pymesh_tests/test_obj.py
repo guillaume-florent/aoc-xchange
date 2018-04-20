@@ -19,6 +19,7 @@ def test_happy_path():
     # Save as OBJ
     mesh.save_obj(p_(__file__, "../models_out/2_boxes.obj"),
                   update_normals=True,
+                  group=True,
                   write_normals=False)
 
     # reopen obj file

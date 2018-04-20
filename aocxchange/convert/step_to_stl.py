@@ -13,7 +13,7 @@ from aocxchange.stl import StlExporter
 from aocutils.mesh import mesh
 from aocutils.operations.transform import scale_uniform
 
-from OCC.Core.gp import gp_Pnt
+# from OCC.Core.gp import gp_Pnt
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +69,7 @@ def step_to_stl(step_file_path,
         """
         exporter = StlExporter(filename=stl_file_, ascii_mode=ascii_mode_)
 
-        shape_ = scale_uniform(shape_, gp_Pnt(0, 0, 0), scale, False)
+        shape_ = scale_uniform(shape_, (0, 0, 0), scale, False)
 
         # Must mesh ! Otherwise the exporter does not write anything!
         mesh(shape_, factor=factor_, use_min_dim=use_min_dim_)
