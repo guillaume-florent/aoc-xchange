@@ -14,7 +14,7 @@ from OCC.Core.STEPControl import STEPControl_Reader, STEPControl_Writer, \
     STEPControl_AsIs
 from OCC.Core.TopoDS import TopoDS_Compound
 
-from aocutils.types import topo_types_dict
+from aocutils.types_ import topo_types_dict
 
 from aocxchange.exceptions import StepFileReadException, \
     StepFileWriteException, StepShapeTransferException, \

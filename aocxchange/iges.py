@@ -19,7 +19,7 @@ from aocxchange.checks import check_importer_filename, check_exporter_filename,\
     check_overwrite, check_shape
 from aocxchange.extensions import iges_extensions
 
-from aocutils.types import topo_types_dict
+from aocutils.types_ import topo_types_dict
 
 logger = logging.getLogger(__name__)
 
