@@ -5,7 +5,7 @@ r"""CAD file acceptable extensions"""
 iges_extensions = ["iges", "igs"]
 step_extensions = ["step", "stp"]
 stl_extensions = ["stl"]
-brep_extensions = ["brep"]
+brep_extensions = ["brep", "brp"]
 dat_extensions = ["dat"]
 
 iges_wildcard = "IGES (*.iges,*.igs)|*.iges;*.igs"

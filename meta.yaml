@@ -1,6 +1,6 @@
 package:
   name: aocxchange
-  version: "18.0.9"
+  version: "18.0.10"
 
 source:
   path: ../aoc-xchange
