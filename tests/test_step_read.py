@@ -13,7 +13,8 @@ from aocutils.topology import Topo
 from aocxchange.exceptions import IncompatibleFileFormatException,\
     StepFileReadException
 from aocxchange.step import StepImporter
-from corelib.core.files import path_from_file
+# from corelib.core.files import path_from_file
+from corelibpy import path_from_file
 
 # Python 2 and 3 compatibility
 try:

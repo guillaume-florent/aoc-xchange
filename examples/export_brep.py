@@ -8,7 +8,8 @@ import logging
 from OCC.Core.BRepPrimAPI import BRepPrimAPI_MakeBox
 
 from aocxchange.brep import BrepExporter
-from corelib.core.files import path_from_file
+# from corelib.core.files import path_from_file
+from corelibpy import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '

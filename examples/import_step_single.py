@@ -13,7 +13,8 @@ from aocutils.display.topology import solids, edges
 from aocutils.display.defaults import backend
 
 from aocxchange.step import StepImporter
-from corelib.core.files import path_from_file
+# from corelib.core.files import path_from_file
+from corelibpy import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '

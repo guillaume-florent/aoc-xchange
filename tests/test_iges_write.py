@@ -16,7 +16,8 @@ from aocutils.topology import Topo, shape_to_topology
 from aocxchange.exceptions import DirectoryNotFoundException, \
     IncompatibleFileFormatException, IgesUnknownFormatException
 from aocxchange.iges import IgesImporter, IgesExporter
-from corelib.core.files import path_from_file
+# from corelib.core.files import path_from_file
+from corelibpy import path_from_file
 
 
 @pytest.yield_fixture(autouse=True)

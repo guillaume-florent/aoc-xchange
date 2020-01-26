@@ -9,8 +9,9 @@ import numpy
 import os
 import struct
 
-from corelib.core.python_ import py3
-from corelib.core.files import is_binary
+# from corelib.core.python_ import py3
+# from corelib.core.files import is_binary
+from corelibpy import is_binary
 
 from .base import BaseMesh
 

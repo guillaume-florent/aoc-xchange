@@ -7,7 +7,8 @@ r"""step_to_stl.py module tests"""
 
 from os.path import isfile
 
-from corelib.core.files import p_
+# from corelib.core.files import p_
+from corelibpy import p_
 
 from aocxchange.convert.step_to_stl import step_to_stl
 

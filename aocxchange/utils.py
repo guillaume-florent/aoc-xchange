@@ -8,7 +8,8 @@ import logging
 import warnings
 import os
 
-import corelib.core.files
+# import corelib.core.files
+import corelibpy
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +42,8 @@ def path_from_file(file_origin, relative_path):
     # return os.path.abspath(os.path.join(dir_of_file_origin, relative_path))
 
     warnings.warn("aocxchange.utils.path_from_file is deprecated, "
-                  "use corelib.core.files.path_from_file or "
-                  "corelib.core.files.p_ instead")
-    return corelib.core.files.path_from_file(file_origin, relative_path)
+                  "use corelibpy.path_from_file or corelibpy.p_ instead")
+    return corelibpy.path_from_file(file_origin, relative_path)
 
 
 def extract_file_extension(filename):
