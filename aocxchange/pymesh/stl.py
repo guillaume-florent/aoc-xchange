@@ -2,21 +2,57 @@
 
 r"""STL format mesh"""
 
-from __future__ import absolute_import, print_function
-
+import os.path
+import sys
 import logging
 import numpy
 import os
 import struct
 
-# from corelib.core.python_ import py3
-# from corelib.core.files import is_binary
-from corelibpy import is_binary
+if sys.version_info > (3, 0):
+    PY3 = True
+else:
+    PY3 = False
 
 from .base import BaseMesh
 
 
 logger = logging.getLogger(__name__)
+
+
+def is_binary(filename):
+    """
+    Return True if the given filename is binary, False otherwise.
+    Parameters
+    ----------
+    filename : str
+        Path to the file
+    Raises
+    ------
+    EnvironmentError    if the file does not exist or cannot be accessed.
+    Reference
+    ---------
+    http://bytes.com/topic/python/answers/21222-determine-file-type-binary-text
+    on 6/08/2010
+    """
+    fin = open(filename, 'rb')
+    try:
+        CHUNKSIZE = 1024
+        while 1:
+            chunk = fin.read(CHUNKSIZE)
+
+            if PY3:
+                backslash_zero = '\0'.encode()
+            else:
+                backslash_zero = '\0'
+
+            if backslash_zero in chunk:  # found null byte
+                return True
+            if len(chunk) < CHUNKSIZE:
+                break  # done
+    finally:
+        fin.close()
+    return False
 
 
 class Stl(BaseMesh):
