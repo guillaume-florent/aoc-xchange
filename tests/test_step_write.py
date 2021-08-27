@@ -19,7 +19,7 @@ from aocxchange.step import StepImporter, StepExporter
 from corelib.core.files import path_from_file
 
 
-@pytest.yield_fixture(autouse=True)
+@pytest.fixture(autouse=True)
 def cleandir():
     r"""Clean the tests output directory
 
