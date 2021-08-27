@@ -5,8 +5,7 @@ r"""checks.py module tests"""
 
 # import pytest
 
-# from corelib.core.files import p_
-from corelibpy import p_
+from corelib.core.files import p_
 from aocxchange.pymesh.stl import Stl
 
 

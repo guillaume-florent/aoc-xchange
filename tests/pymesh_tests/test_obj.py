@@ -7,8 +7,7 @@ r"""checks.py module tests"""
 
 from os.path import isfile
 
-# from corelib.core.files import p_
-from corelibpy import p_
+from corelib.core.files import p_
 from aocxchange.pymesh.stl import Stl
 from aocxchange.pymesh.obj import Obj
 

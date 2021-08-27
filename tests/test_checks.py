@@ -15,8 +15,7 @@ from aocxchange.checks import check_importer_filename, check_exporter_filename,\
     check_overwrite, check_shape
 from aocxchange.exceptions import DirectoryNotFoundException, \
     IncompatibleFileFormatException
-# from corelib.core.files import path_from_file
-from corelibpy import path_from_file
+from corelib.core.files import path_from_file
 
 # Python 2 and 3 compatibility
 try:

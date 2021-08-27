@@ -7,8 +7,7 @@ r"""step_to_obj.py module tests"""
 
 from os.path import isfile
 
-# from corelib.core.files import p_
-from corelibpy import p_
+from corelib.core.files import p_
 
 from aocxchange.convert.step_to_obj import step_to_obj
 

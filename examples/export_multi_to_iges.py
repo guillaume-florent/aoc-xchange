@@ -8,8 +8,7 @@ import logging
 import OCC.Core.BRepPrimAPI
 
 from aocxchange.iges import IgesExporter
-# from corelib.core.files import path_from_file
-from corelibpy import path_from_file
+from corelib.core.files import path_from_file
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s :: %(levelname)6s :: %(module)20s :: '
