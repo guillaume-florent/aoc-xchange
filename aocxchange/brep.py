@@ -6,9 +6,13 @@ from __future__ import print_function
 
 import logging
 
+import OCC
 from OCC.Core.BRep import BRep_Builder
 from OCC.Core.BRepTools import breptools_Write, breptools_Read
-from OCC.Core.Message import Handle_Message_ProgressIndicator
+if OCC.VERSION[0] == '7':
+    from OCC.Core.Message import Handle_Message_ProgressIndicator_Create
+else:
+    from OCC.Core.Message import Handle_Message_ProgressIndicator
 from OCC.Core.TopoDS import TopoDS_Shape
 
 # import aocxchange.exceptions
@@ -86,6 +90,9 @@ class BrepExporter(object):
     def write_file(self):
         r"""Write file"""
         logger.info("Writing brep : {cad_file}".format(cad_file=self._filename))
-        builder = Handle_Message_ProgressIndicator()
+        if OCC.VERSION[0] == '7':
+            builder = Handle_Message_ProgressIndicator_Create()
+        else:
+            builder = Handle_Message_ProgressIndicator()
         breptools_Write(self._shape, self._filename, builder)
         logger.info("Wrote BREP file")
